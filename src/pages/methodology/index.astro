@@ -1,0 +1,180 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { METHODOLOGY_PHASES, PHASE_FLOW } from '../../lib/site';
+import { getMethodology } from '../../lib/content';
+
+const items = await getMethodology();
+const totalTools = [...new Set(items.flatMap((i) => i.data.tools))].length;
+
+const phases = METHODOLOGY_PHASES.map((phase) => ({
+  phase,
+  short: PHASE_FLOW.find((p) => p.phase === phase)?.short ?? '',
+  count: items.filter((i) => i.data.phase === phase).length,
+})).filter((p) => p.count > 0);
+
+const cards = items.map((item) => ({
+  id: item.id,
+  title: item.data.title,
+  description: item.data.description,
+  phase: item.data.phase,
+  tags: item.data.tags,
+  tools: item.data.tools,
+}));
+---
+
+<BaseLayout
+  title="Pentesting Methodology"
+  description="A living, battle-tested pentesting methodology covering web, API, phishing and general hacking techniques. Pulled from live research."
+>
+  <PageHeader
+    eyebrow="~/methodology"
+    title="Pentesting Methodology."
+    description="A living playbook built from real engagements, bug bounty programs and labs. Browse by category or search the full library."
+    meta={`${items.length} techniques · ${phases.length} categories · ${totalTools} tooling references`}
+  />
+
+  <section class="container-page py-12 md:py-16">
+    <div class="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        phases.map((p) => (
+          <button
+            type="button"
+            class="filter-card card flex flex-col gap-1 p-5 text-left"
+            data-filter={p.phase}
+          >
+            <span class="flex items-baseline justify-between">
+              <span class="text-sm font-bold text-ink-100">{p.phase}</span>
+              <span class="font-mono text-xs text-accent-400">{p.count}</span>
+            </span>
+            <span class="text-xs leading-relaxed text-ink-400">{p.short}</span>
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div class="flex flex-wrap gap-2">
+        <button type="button" class="chip filter-pill" data-filter="all" data-active="true">All</button>
+        {
+          phases.map((p) => (
+            <button type="button" class="chip filter-pill" data-filter={p.phase}>
+              {p.phase}
+            </button>
+          ))
+        }
+      </div>
+      <label class="relative block sm:w-72">
+        <span class="sr-only">Search techniques</span>
+        <svg class="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-ink-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7" />
+          <path d="m21 21-4.3-4.3" />
+        </svg>
+        <input
+          id="methodology-search"
+          type="search"
+          placeholder="Filter techniques…"
+          autocomplete="off"
+          class="w-full rounded-lg border border-ink-700 bg-ink-900/80 py-2 pl-9 pr-3 font-mono text-sm text-ink-100 outline-none transition-colors placeholder:text-ink-500 focus:border-accent-500"
+        />
+      </label>
+    </div>
+
+    <p id="methodology-count" class="mb-4 font-mono text-xs text-ink-500" aria-live="polite"></p>
+
+    <div id="methodology-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+
+    <p id="methodology-empty" class="hidden rounded-lg border border-ink-700 bg-ink-850 p-8 text-center text-sm text-ink-400">
+      No techniques match your filter.
+    </p>
+  </section>
+
+  <script type="application/json" id="methodology-data" set:html={JSON.stringify(cards)} />
+
+  <script>
+    type Card = {
+      id: string;
+      title: string;
+      description: string;
+      phase: string;
+      tags: string[];
+      tools: string[];
+    };
+
+    const dataEl = document.getElementById('methodology-data');
+    const grid = document.getElementById('methodology-grid')!;
+    const search = document.getElementById('methodology-search') as HTMLInputElement;
+    const countEl = document.getElementById('methodology-count')!;
+    const emptyEl = document.getElementById('methodology-empty')!;
+    const cards: Card[] = dataEl ? JSON.parse(dataEl.textContent || '[]') : [];
+
+    let activePhase = 'all';
+    let query = '';
+
+    const esc = (s: string) =>
+      s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+    const matches = (c: Card) => {
+      if (activePhase !== 'all' && c.phase !== activePhase) return false;
+      if (!query) return true;
+      const haystack = [c.title, c.description, c.phase, ...c.tags, ...c.tools].join(' ').toLowerCase();
+      return haystack.includes(query);
+    };
+
+    const render = () => {
+      const visible = cards.filter(matches);
+      grid.innerHTML = visible
+        .map((c) => {
+          const tools = c.tools
+            .slice(0, 4)
+            .map((t) => `<span class="chip">${esc(t)}</span>`)
+            .join('');
+          return `
+            <a href="/methodology/${c.id}" class="card group flex h-full flex-col gap-2 p-5">
+              <div class="flex items-center justify-between gap-2">
+                <span class="font-mono text-[0.62rem] uppercase tracking-widest text-accent-400">${esc(c.phase)}</span>
+                <span class="font-mono text-accent-400 transition-transform group-hover:translate-x-1">→</span>
+              </div>
+              <h3 class="text-base font-bold leading-snug text-ink-100 group-hover:text-accent-300">${esc(c.title)}</h3>
+              <p class="flex-1 text-sm leading-relaxed text-ink-400">${esc(c.description)}</p>
+              <div class="mt-1 flex flex-wrap gap-1.5">${tools}</div>
+            </a>`;
+        })
+        .join('');
+
+      countEl.textContent = `${visible.length} technique${visible.length === 1 ? '' : 's'}${
+        activePhase !== 'all' ? ` in ${activePhase}` : ''
+      }`;
+      emptyEl.classList.toggle('hidden', visible.length > 0);
+      grid.classList.toggle('hidden', visible.length === 0);
+    };
+
+    const setActive = (phase: string) => {
+      activePhase = phase;
+      document.querySelectorAll<HTMLElement>('[data-filter]').forEach((el) => {
+        const on = el.dataset.filter === phase;
+        if (el.classList.contains('filter-pill')) el.dataset.active = String(on);
+        if (el.classList.contains('filter-card')) el.dataset.active = String(on);
+      });
+      render();
+    };
+
+    document.querySelectorAll<HTMLElement>('[data-filter]').forEach((el) => {
+      el.addEventListener('click', () => setActive(el.dataset.filter || 'all'));
+    });
+
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    search?.addEventListener('input', () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        query = search.value.trim().toLowerCase();
+        render();
+      }, 120);
+    });
+
+    const params = new URLSearchParams(location.search);
+    const initial = params.get('category');
+    render();
+    if (initial) setActive(initial);
+  </script>
+</BaseLayout>

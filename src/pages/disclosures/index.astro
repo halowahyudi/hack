@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import DisclosureCard from '../../components/DisclosureCard.astro';
+import { getDisclosures } from '../../lib/content';
+import { SEVERITY_ORDER } from '../../lib/site';
+
+const disclosures = await getDisclosures();
+const severityCounts = SEVERITY_ORDER.map((s) => ({
+  severity: s,
+  count: disclosures.filter((d) => d.data.severity === s).length,
+})).filter((s) => s.count > 0);
+const categories = [...new Set(disclosures.map((d) => d.data.category))];
+---
+
+<BaseLayout
+  title="Disclosures"
+  description="Coordinated vulnerability disclosures and security research notes — redacted by design, focused on root cause and impact."
+>
+  <PageHeader
+    eyebrow="~/disclosures"
+    title="Coordinated disclosures."
+    description="Findings from real research, published responsibly. Details are withheld until vendors have had time to remediate — these writeups focus on root cause, impact and lessons, not exploits."
+    meta={`${disclosures.length} disclosures · ${categories.length} categories · redacted by default`}
+  />
+
+  <section class="container-page py-12 md:py-16">
+    <div class="mb-8 flex flex-wrap gap-2">
+      {severityCounts.map((s) => (
+        <span class="chip">
+          {s.severity} <span class="text-ink-500">{s.count}</span>
+        </span>
+      ))}
+      <span class="chip"># responsible-disclosure</span>
+    </div>
+
+    <div class="mb-10 rounded-lg border border-amber-500/30 bg-amber-500/[0.06] p-5">
+      <p class="font-mono text-xs uppercase tracking-widest text-amber-400">Disclosure policy</p>
+      <p class="mt-2 max-w-3xl text-sm leading-relaxed text-ink-300">
+        Every finding here follows a coordinated disclosure process. Technical specifics — endpoints,
+        parameters, tokens, and reproduction steps — are intentionally omitted while remediation is in
+        progress. If you operate an affected service and need the full report, reach out through the
+        published security channel.
+      </p>
+    </div>
+
+    {
+      disclosures.length === 0 ? (
+        <p class="rounded-lg border border-ink-700 bg-ink-850 p-8 text-sm text-ink-400">
+          Disclosures will appear here as they are cleared for publication.
+        </p>
+      ) : (
+        <div class="grid gap-5 md:grid-cols-2">
+          {disclosures.map((d) => <DisclosureCard disclosure={d} />)}
+        </div>
+      )
+    }
+  </section>
+</BaseLayout>

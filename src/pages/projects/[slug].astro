@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getProjects, formatDate } from '../../lib/content';
+import { render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const statusLabel = { active: 'active', maintained: 'maintained', archived: 'archived' }[project.data.status];
+---
+
+<BaseLayout title={project.data.title} description={project.data.description}>
+
+  <article class="container-page max-w-3xl py-12 md:py-16">
+    <nav class="mb-6 flex items-center gap-2 font-mono text-xs text-ink-500">
+      <a href="/projects" class="link-accent">~/projects</a>
+      <span>/</span>
+      <span class="text-ink-400">{project.id}</span>
+    </nav>
+
+    <header class="mb-8">
+      <div class="mb-4 flex items-center gap-3">
+        <span class="font-mono text-2xl text-accent-400" aria-hidden="true">{project.data.icon}</span>
+        <span class="chip" data-status={project.data.status}>
+          <span class="status-dot" data-status={project.data.status} aria-hidden="true"></span>
+          {statusLabel}
+        </span>
+        <span class="chip" data-accent="true">{project.data.type}</span>
+      </div>
+
+      <h1 class="text-3xl font-extrabold tracking-tight text-ink-100 md:text-4xl">
+        {project.data.title}
+      </h1>
+      <p class="mt-4 max-w-2xl text-base leading-relaxed text-ink-400">{project.data.description}</p>
+
+      <div class="mt-6 flex flex-wrap gap-3">
+        {project.data.repo && (
+          <a href={project.data.repo} class="btn btn-ghost" target="_blank" rel="noopener">↗ repository</a>
+        )}
+        {project.data.demo && (
+          <a href={project.data.demo} class="btn" target="_blank" rel="noopener">↗ live demo</a>
+        )}
+        {project.data.docs && (
+          <a href={project.data.docs} class="btn btn-ghost" target="_blank" rel="noopener">↗ docs</a>
+        )}
+        {project.data.link && (
+          <a href={project.data.link} class="btn btn-ghost" target="_blank" rel="noopener">↗ link</a>
+        )}
+      </div>
+
+      <div class="mt-7 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-ink-500">
+        <span>started {formatDate(project.data.pubDate)}</span>
+        {project.data.updated && <span>updated {formatDate(project.data.updated)}</span>}
+      </div>
+    </header>
+
+    {project.data.stack.length > 0 && (
+      <div class="mb-6 flex flex-wrap items-center gap-2">
+        <span class="font-mono text-xs text-ink-500">stack:</span>
+        {project.data.stack.map((s) => <span class="chip">{s}</span>)}
+      </div>
+    )}
+
+    <div class="prose prose-custom max-w-none" data-pagefind-body>
+      <Content />
+    </div>
+  </article>
+
+</BaseLayout>

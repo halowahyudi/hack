@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MethodologySidebar from '../../components/MethodologySidebar.astro';
+import PrevNext from '../../components/PrevNext.astro';
+import { getMethodology, formatDate } from '../../lib/content';
+import { render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const items = await getMethodology();
+  return items.map((item) => ({
+    params: { slug: item.id },
+    props: { item },
+  }));
+}
+
+const { item } = Astro.props;
+const { Content } = await render(item);
+const updated = item.data.updated || new Date();
+---
+
+<BaseLayout
+  title={item.data.title}
+  description={item.data.description}
+  ogType="article"
+>
+  <div class="container-page grid gap-10 py-10 md:py-14 lg:grid-cols-[15rem_1fr]">
+    <aside class="hidden lg:block">
+      <div class="sticky top-24">
+        <MethodologySidebar currentId={item.id} currentPhase={item.data.phase} />
+      </div>
+    </aside>
+
+    <div class="lg:block lg:hidden">
+      <MethodologySidebar currentId={item.id} currentPhase={item.data.phase} />
+    </div>
+
+    <article class="min-w-0">
+      <nav class="mb-4 flex items-center gap-2 font-mono text-xs text-ink-500">
+        <a href="/methodology" class="link-accent">~/methodology</a>
+        <span>/</span>
+        <a href={`/methodology?category=${encodeURIComponent(item.data.phase)}`} class="link-accent">{item.data.phase}</a>
+        <span>/</span>
+        <span class="truncate text-ink-400">{item.id}</span>
+      </nav>
+
+      <header class="mb-8">
+        <div class="flex flex-wrap items-center gap-2">
+          <a href={`/methodology?category=${encodeURIComponent(item.data.phase)}`} class="chip" data-accent="true">{item.data.phase}</a>
+          {updated && (
+            <span class="ml-auto font-mono text-[0.68rem] text-ink-500">
+              updated {formatDate(updated)}
+            </span>
+          )}
+        </div>
+
+        <h1 class="mt-4 text-3xl font-extrabold tracking-tight text-ink-100 md:text-4xl">
+          {item.data.title}
+        </h1>
+        <p class="mt-4 max-w-2xl text-base leading-relaxed text-ink-400">{item.data.description}</p>
+
+        {item.data.tools.length > 0 && (
+          <div class="mt-6 flex flex-wrap items-center gap-2">
+            <span class="font-mono text-xs text-ink-500">toolbox:</span>
+            {item.data.tools.map((t) => <span class="chip">{t}</span>)}
+          </div>
+        )}
+      </header>
+
+      <div class="prose prose-custom max-w-none" data-pagefind-body>
+        <Content />
+      </div>
+
+      <div class="mt-10">
+        <PrevNext currentId={item.id} phase={item.data.phase} />
+      </div>
+    </article>
+  </div>
+</BaseLayout>

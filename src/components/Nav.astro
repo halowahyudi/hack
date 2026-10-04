@@ -1,0 +1,123 @@
+---
+import { NAV, SITE } from '../lib/site';
+
+const path = Astro.url.pathname;
+
+function isActive(href: string): boolean {
+  if (href === '/') return path === '/';
+  return path === href || path.startsWith(`${href}/`);
+}
+---
+
+<header class="sticky top-0 z-40 border-b border-ink-800/90 bg-ink-950/80 backdrop-blur-md">
+  <nav class="container-page flex h-16 items-center justify-between gap-4" aria-label="Primary">
+    <a href="/" class="group flex items-baseline gap-1 font-mono text-sm font-semibold text-ink-100">
+      <span class="text-accent-400">~</span>
+      <span class="text-ink-200">{SITE.domain}</span>
+      <span class="blinker" aria-hidden="true"></span>
+    </a>
+
+    <ul class="hidden items-center gap-1 md:flex">
+      {
+        NAV.map((item) => (
+          <li>
+            <a href={item.href} class="nav-link" data-active={isActive(item.href)}>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="flex items-center gap-2">
+      <button
+        id="search-trigger"
+        type="button"
+        class="hidden h-9 w-56 items-center gap-2 rounded-full border border-ink-700 bg-ink-900/80 pl-3 pr-2.5 text-left transition-colors hover:border-ink-500 hover:bg-ink-850 sm:inline-flex"
+        aria-label="Search the site"
+      >
+        <svg class="h-3.5 w-3.5 shrink-0 text-ink-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7" />
+          <path d="m21 21-4.3-4.3" />
+        </svg>
+        <span class="flex-1 truncate font-mono text-xs text-ink-400">Search…</span>
+        <span class="inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-ink-700/70 px-1.5 font-mono text-[0.65rem] leading-none text-ink-300">/</span>
+      </button>
+
+      <button
+        id="menu-toggle"
+        type="button"
+        class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-ink-700 bg-ink-850 text-ink-200 md:hidden"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+      >
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
+          <path id="menu-icon-open" d="M4 7h16M4 12h16M4 17h16" />
+          <path id="menu-icon-close" d="M6 6l12 12M18 6L6 18" class="hidden" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <div id="mobile-menu" class="hidden border-t border-ink-800 bg-ink-950/95 backdrop-blur-md md:hidden">
+    <ul class="container-page flex flex-col py-3">
+      {
+        NAV.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class="block px-2 py-2.5 font-mono text-sm uppercase tracking-widest"
+              data-active={isActive(item.href)}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+            >
+              <span class={isActive(item.href) ? 'text-accent-400' : 'text-ink-300'}>
+                {item.label}
+              </span>
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <button id="mobile-search" type="button" class="flex w-full items-center gap-2 px-2 py-2.5 text-left font-mono text-sm uppercase tracking-widest text-ink-300">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+          Search
+        </button>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const iconOpen = document.getElementById('menu-icon-open')!;
+  const iconClose = document.getElementById('menu-icon-close')!;
+  const openIcon = document.getElementById('search-trigger') as HTMLButtonElement;
+  const mobileSearch = document.getElementById('mobile-search');
+
+  const openSearch = () => {
+    window.dispatchEvent(new CustomEvent('open-site-search'));
+  };
+
+  toggle?.addEventListener('click', () => {
+    const hidden = menu?.classList.toggle('hidden') ?? false;
+    iconOpen?.classList.toggle('hidden', !hidden);
+    iconClose?.classList.toggle('hidden', hidden);
+    toggle?.setAttribute('aria-expanded', String(!hidden));
+  });
+
+  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => {
+    menu.classList.add('hidden');
+    iconOpen?.classList.remove('hidden');
+    iconClose?.classList.add('hidden');
+  }));
+
+  openIcon?.addEventListener('click', openSearch);
+  mobileSearch?.addEventListener('click', () => {
+    menu?.classList.add('hidden');
+    openSearch();
+  });
+</script>

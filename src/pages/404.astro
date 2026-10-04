@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="404 · Not found" noindex>
+  <section class="container-page flex flex-col items-start gap-6 py-24 md:py-32">
+    <div class="terminal w-full max-w-xl">
+      <div class="terminal-bar">
+        <span class="terminal-dot" style="background:#ff5f56"></span>
+        <span class="terminal-dot" style="background:#ffbd2e"></span>
+        <span class="terminal-dot" style="background:#27c93f"></span>
+        <span class="ml-2 font-mono text-[0.7rem] text-ink-500">404 — route not found</span>
+      </div>
+      <div class="terminal-body text-ink-200">
+        <span class="terminal-prompt">$</span> curl -s https://wahyudi.dev/<span class="terminal-path">this-page</span>
+        <br />
+        <span class="text-signal-500">HTTP/1.1 404 Not Found</span>
+        <br />
+        <span class="terminal-prompt">$</span> <span class="font-sans">you're off the grid.</span>
+        <span class="blinker"></span>
+      </div>
+    </div>
+
+    <p class="max-w-lg text-lg text-ink-400">
+      This page doesn't exist, or I unpublished it. Here are some useful routes instead.
+    </p>
+
+    <div class="flex flex-wrap gap-3">
+      <a href="/" class="btn btn-ghost">← home</a>
+      <a href="/blog" class="btn btn-ghost">blog</a>
+      <a href="/projects" class="btn btn-ghost">projects</a>
+      <a href="/methodology" class="btn">methodology</a>
+    </div>
+  </section>
+</BaseLayout>

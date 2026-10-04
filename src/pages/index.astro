@@ -1,0 +1,197 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Pipeline from '../components/Pipeline.astro';
+import PostCard from '../components/PostCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import DisclosureCard from '../components/DisclosureCard.astro';
+import { SITE, METHODOLOGY_PHASES } from '../lib/site';
+import { getBlogPosts, getMethodology, getProjects, getDisclosures } from '../lib/content';
+
+const posts = (await getBlogPosts()).filter((p) => !p.data.draft);
+const projects = (await getProjects()).filter((p) => !p.data.draft);
+const methodology = await getMethodology();
+const disclosures = (await getDisclosures()).slice(0, 2);
+
+const featuredPosts = posts.filter((p) => p.data.featured).slice(0, 3);
+const latestPosts = featuredPosts.length > 0 ? featuredPosts : posts.slice(0, 3);
+const featuredProjects = projects.slice(0, 4);
+
+const phaseCounts = METHODOLOGY_PHASES.map((phase) => ({
+  phase,
+  count: methodology.filter((m) => m.data.phase === phase).length,
+}));
+
+const focus = [
+  'Web App Pentesting',
+  'API Security',
+  'Mobile Security',
+  'SDET / Test Automation',
+  'Secure Software',
+  'Bug Bounty & Disclosure',
+] as const;
+---
+
+<BaseLayout>
+  <!-- ================= HERO ================= -->
+  <section class="relative overflow-hidden">
+    <div class="grid-overlay" aria-hidden="true"></div>
+    <div class="container-page relative grid items-center gap-12 py-16 md:py-24 lg:grid-cols-[1.15fr_1fr]">
+      <div>
+        <p class="section-eyebrow mb-4">~/ introduction</p>
+        <h1 class="text-4xl font-extrabold leading-[1.1] tracking-tight text-ink-100 md:text-6xl">
+          Security-minded
+          <br />
+          engineer &amp; researcher.
+        </h1>
+        <p class="mt-5 max-w-xl text-lg leading-relaxed text-ink-400">
+          I'm {SITE.author} — I build reliable software, then attack it before the
+          adversaries do. SDET automation, application security, and offensive
+          research with responsible disclosure at the core.
+        </p>
+
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a href="/methodology" class="btn">methodology →</a>
+          <a href="/projects" class="btn btn-ghost">projects</a>
+          <a href="/blog" class="btn btn-ghost">blog</a>
+        </div>
+
+        <ul class="mt-9 flex flex-wrap gap-2">
+          {focus.map((f) => (
+            <li class="chip" data-accent="true">{f}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="terminal" aria-hidden="true">
+        <div class="terminal-bar">
+          <span class="terminal-dot" style="background:#ff5f56"></span>
+          <span class="terminal-dot" style="background:#ffbd2e"></span>
+          <span class="terminal-dot" style="background:#27c93f"></span>
+          <span class="ml-2 font-mono text-[0.7rem] text-ink-500">wint3rcold@attack-box: ~</span>
+        </div>
+        <div class="terminal-body text-ink-200">
+          <span class="terminal-prompt">$</span> whoami
+          <br />
+          &nbsp;&nbsp;hacker-honest / wahyudi.dev
+          <br />
+          <span class="terminal-prompt">$</span> cat roles.txt
+          <br />
+          &nbsp;&nbsp;→ Software Engineer
+          <br />
+          &nbsp;&nbsp;→ SDET
+          <br />
+          &nbsp;&nbsp;→ Application Security
+          <br />
+          &nbsp;&nbsp;→ Security Researcher
+          <br />
+          <span class="terminal-prompt">$</span> <span class="terminal-path">nmap</span> --top-ports 1000 my_ambition
+          <br />
+          &nbsp;&nbsp;<span class="terminal-path">443/tcp</span> open &nbsp; https (ADHD dreamer)
+          <br />
+          &nbsp;&nbsp;<span class="terminal-path">9000/tcp</span> open &nbsp; effort &amp; consistency
+          <br />
+          <span class="terminal-prompt">$</span> echo "explore → /methodology /blog /projects"
+          <br />
+          <span class="terminal-path">explore → /methodology /blog /projects</span>
+          <span class="blinker"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= METHODOLOGY ================= -->
+  <section class="border-t border-ink-800/70 bg-ink-900/40">
+    <div class="container-page py-16 md:py-20">
+      <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="section-eyebrow mb-3" data-style="2">live research doc</p>
+          <h2 class="text-2xl font-bold text-ink-100 md:text-3xl">Pentesting Methodology</h2>
+          <p class="mt-2 max-w-2xl text-ink-400">
+            A living playbook I run against real targets — scoped engagements, bug bounty
+            programs and labs. Organized across web, API, phishing and general hacking.
+          </p>
+        </div>
+        <a href="/methodology" class="btn btn-ghost">full methodology →</a>
+      </div>
+
+      <Pipeline />
+
+      <div class="mt-8 flex flex-wrap items-center gap-2 font-mono text-xs text-ink-500">
+        <span class="mr-1 text-ink-400">browse:</span>
+        {phaseCounts.map((p) => (
+          <a href={`/methodology?category=${encodeURIComponent(p.phase)}`} class="chip hover:border-accent-500 hover:text-accent-300">
+            {p.phase} · {p.count}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= POSTS ================= -->
+  <section class="container-page py-16 md:py-20">
+    <div class="mb-8 flex items-end justify-between gap-4">
+      <div>
+        <p class="section-eyebrow mb-3" data-style="3">~/blog</p>
+        <h2 class="text-2xl font-bold text-ink-100 md:text-3xl">Latest from the blog</h2>
+      </div>
+      <a href="/blog" class="link-accent font-mono text-sm">all posts →</a>
+    </div>
+
+    <div class="grid gap-5 md:grid-cols-3">
+      {latestPosts.map((post) => <PostCard post={post} />)}
+    </div>
+  </section>
+
+  <!-- ================= PROJECTS ================= -->
+  <section class="border-t border-ink-800/70 bg-ink-900/40">
+    <div class="container-page py-16 md:py-20">
+      <div class="mb-8 flex items-end justify-between gap-4">
+        <div>
+          <p class="section-eyebrow mb-3" data-style="2">~/projects</p>
+          <h2 class="text-2xl font-bold text-ink-100 md:text-3xl">Featured projects</h2>
+        </div>
+        <a href="/projects" class="link-accent font-mono text-sm">all projects →</a>
+      </div>
+
+      <div class="grid gap-5 sm:grid-cols-2">
+        {featuredProjects.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DISCLOSURES ================= -->
+  <section class="container-page py-16 md:py-20">
+    <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="section-eyebrow mb-3" data-style="3">~/disclosures</p>
+        <h2 class="text-2xl font-bold text-ink-100 md:text-3xl">Security disclosures</h2>
+        <p class="mt-2 max-w-2xl text-ink-400">
+          Findings reported through coordinated disclosure to major platforms — root cause and
+          impact, redacted until remediation.
+        </p>
+      </div>
+      <a href="/disclosures" class="link-accent font-mono text-sm">all disclosures →</a>
+    </div>
+
+    <div class="grid gap-5 md:grid-cols-2">
+      {disclosures.map((d) => <DisclosureCard disclosure={d} />)}
+    </div>
+  </section>
+
+  <!-- ================= CONTACT STRIP ================= -->  <section class="container-page py-16 md:py-20">
+    <div class="flex flex-col items-start justify-between gap-6 rounded-xl border border-ink-700 bg-ink-850 p-8 md:flex-row md:items-center md:p-10">
+      <div>
+        <p class="section-eyebrow mb-3" data-style="3">connect</p>
+        <h2 class="text-2xl font-bold text-ink-100">Let's talk security.</h2>
+        <p class="mt-2 max-w-lg text-ink-400">
+          Research, triage, mitigation, or a challenging target — I'm open for
+          collaboration and security consulting.
+        </p>
+      </div>
+      <div class="flex shrink-0 flex-wrap gap-3">
+        <a href={`mailto:${SITE.email}`} class="btn">email me →</a>
+        <a href={SITE.socials.hackerone} class="btn btn-ghost" target="_blank" rel="noopener">HackerOne ↗</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

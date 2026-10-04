@@ -1,0 +1,47 @@
+---
+import { formatDate, type Disclosure } from '../lib/content';
+import { SEVERITY_META, type Severity } from '../lib/site';
+
+interface Props {
+  disclosure: Disclosure;
+}
+
+const { disclosure } = Astro.props;
+const sev = SEVERITY_META[disclosure.data.severity as Severity] ?? SEVERITY_META.Informational;
+---
+
+<article class="card group relative flex h-full flex-col gap-3 p-5">
+  <a
+    href={`/disclosures/${disclosure.id}`}
+    class="absolute inset-0 z-0 rounded-[inherit]"
+    aria-label={`Read disclosure: ${disclosure.data.title}`}
+    data-pagefind-meta={`title=${disclosure.data.title}`}
+  />
+
+  <div class="flex flex-wrap items-center gap-x-2 gap-y-1.5">
+    <span class={`chip border ${sev.className}`}>{sev.label}</span>
+    {disclosure.data.cwe && <span class="chip font-mono">{disclosure.data.cwe}</span>}
+    <span class="font-mono text-[0.68rem] text-ink-400">{disclosure.data.category}</span>
+  </div>
+
+  <h3 class="text-lg font-bold leading-snug text-ink-100 transition-colors group-hover:text-accent-300">
+    {disclosure.data.title}
+  </h3>
+
+  <p class="flex-1 text-sm leading-relaxed text-ink-400">{disclosure.data.description}</p>
+
+  <div class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-ink-800 pt-3">
+    <div class="flex items-center gap-2 font-mono text-[0.68rem] text-ink-500">
+      <time datetime={disclosure.data.pubDate.toISOString()}>{formatDate(disclosure.data.pubDate)}</time>
+      {disclosure.data.redacted && (
+        <>
+          <span aria-hidden="true">·</span>
+          <span class="text-amber-400/90">redacted</span>
+        </>
+      )}
+    </div>
+    <span class="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-accent-400 transition-colors group-hover:text-accent-300">
+      read →
+    </span>
+  </div>
+</article>

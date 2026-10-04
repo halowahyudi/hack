@@ -1,0 +1,36 @@
+---
+import { getMethodology, type Methodology } from '../lib/content';
+
+interface Props {
+  currentId: string;
+  phase?: string;
+}
+
+const { currentId, phase } = Astro.props;
+const all = await getMethodology();
+const items = phase ? all.filter((i) => i.data.phase === phase) : all;
+const idx = items.findIndex((i) => i.id === currentId);
+const prev: Methodology | undefined = items[idx - 1];
+const next: Methodology | undefined = items[idx + 1];
+---
+
+<nav aria-label="Methodology navigation" class="grid gap-4 border-t border-ink-800 pt-8 sm:grid-cols-2">
+  {
+    prev ? (
+      <a href={`/methodology/${prev.id}`} class="card flex flex-col gap-1 p-4">
+        <span class="font-mono text-[0.65rem] uppercase tracking-widest text-ink-500">← prev</span>
+        <span class="text-sm font-semibold text-ink-100">{prev.data.title}</span>
+      </a>
+    ) : (
+      <span></span>
+    )
+  }
+  {
+    next && (
+      <a href={`/methodology/${next.id}`} class="card flex flex-col items-end gap-1 p-4 text-right">
+        <span class="font-mono text-[0.65rem] uppercase tracking-widest text-ink-500">next →</span>
+        <span class="text-sm font-semibold text-ink-100">{next.data.title}</span>
+      </a>
+    )
+  }
+</nav>

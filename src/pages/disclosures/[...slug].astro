@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getDisclosures, formatDate, readingMinutes } from '../../lib/content';
+import { SEVERITY_META, type Severity } from '../../lib/site';
+import { render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const disclosures = await getDisclosures();
+  return disclosures.map((disclosure) => ({
+    params: { slug: disclosure.id },
+    props: { disclosure },
+  }));
+}
+
+const { disclosure } = Astro.props;
+const { Content } = await render(disclosure);
+const minutes = readingMinutes(disclosure.body);
+const sev = SEVERITY_META[disclosure.data.severity as Severity] ?? SEVERITY_META.Informational;
+const all = await getDisclosures();
+const idx = all.findIndex((d) => d.id === disclosure.id);
+const prev = all[idx - 1];
+const next = all[idx + 1];
+
+const meta = [
+  { label: 'Program', value: disclosure.data.program },
+  { label: 'Class', value: disclosure.data.category },
+  ...(disclosure.data.cwe ? [{ label: 'CWE', value: disclosure.data.cwe }] : []),
+  { label: 'Recorded', value: formatDate(disclosure.data.recorded) },
+];
+---
+
+<BaseLayout
+  title={disclosure.data.title}
+  description={disclosure.data.description}
+  ogType="article"
+>
+  <article class="container-page max-w-3xl py-12 md:py-16">
+    <nav class="mb-6 flex items-center gap-2 font-mono text-xs text-ink-500">
+      <a href="/disclosures" class="link-accent">~/disclosures</a>
+      <span>/</span>
+      <span class="truncate text-ink-400">{disclosure.id}</span>
+    </nav>
+
+    <header class="mb-10">
+      <div class="mb-4 flex flex-wrap items-center gap-2">
+        <span class={`chip border ${sev.className}`}>{sev.label}</span>
+        {disclosure.data.redacted && <span class="chip border-amber-500/40 text-amber-400">redacted</span>}
+        {disclosure.data.featured && <span class="chip">featured</span>}
+      </div>
+
+      <h1 class="text-3xl font-extrabold leading-tight tracking-tight text-ink-100 md:text-4xl">
+        {disclosure.data.title}
+      </h1>
+
+      <div class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-ink-400">
+        <time datetime={disclosure.data.pubDate.toISOString()}>{formatDate(disclosure.data.pubDate)}</time>
+        <span class="text-ink-600">·</span>
+        <span>{minutes} min read</span>
+        {disclosure.data.updated && (
+          <>
+            <span class="text-ink-600">·</span>
+            <span class="text-accent-400">updated {formatDate(disclosure.data.updated)}</span>
+          </>
+        )}
+      </div>
+
+      <p class="mt-5 border-l-2 border-accent-500 pl-4 text-base leading-relaxed text-ink-300">
+        {disclosure.data.description}
+      </p>
+
+      <dl class="mt-6 grid grid-cols-2 gap-x-4 gap-y-3 border-y border-ink-800 py-4 sm:grid-cols-4">
+        {
+          meta.map((m) => (
+            <div>
+              <dt class="font-mono text-[0.62rem] uppercase tracking-widest text-ink-500">{m.label}</dt>
+              <dd class="mt-0.5 text-sm font-medium text-ink-200">{m.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      <div class="mt-5 flex flex-wrap gap-1.5">
+        {disclosure.data.tags.map((tag) => (
+          <a href={`/blog/tags/${tag.toLowerCase().replace(/\s+/g, '-')}`} class="chip">#{tag}</a>
+        ))}
+      </div>
+    </header>
+
+    <div class="mb-8 rounded-lg border border-ink-700 bg-ink-850 p-4">
+      <p class="font-mono text-xs leading-relaxed text-ink-400">
+        <span class="text-amber-400">note —</span> details withheld under coordinated disclosure.
+        No exploit code, endpoint paths or reproduction steps are published.
+      </p>
+    </div>
+
+    <div class="prose prose-custom max-w-none" data-pagefind-body>
+      <Content />
+    </div>
+
+    <nav aria-label="Disclosures navigation" class="mt-14 grid gap-4 border-t border-ink-800 pt-8 sm:grid-cols-2">
+      {
+        next ? (
+          <a href={`/disclosures/${next.id}`} class="card flex flex-col gap-1 p-4">
+            <span class="font-mono text-[0.65rem] uppercase tracking-widest text-ink-500">← next</span>
+            <span class="text-sm font-semibold text-ink-100">{next.data.title}</span>
+          </a>
+        ) : (
+          <span></span>
+        )
+      }
+      {
+        prev && (
+          <a href={`/disclosures/${prev.id}`} class="card flex flex-col items-end gap-1 p-4 text-right">
+            <span class="font-mono text-[0.65rem] uppercase tracking-widest text-ink-500">prev →</span>
+            <span class="text-sm font-semibold text-ink-100">{prev.data.title}</span>
+          </a>
+        )
+      }
+    </nav>
+  </article>
+</BaseLayout>

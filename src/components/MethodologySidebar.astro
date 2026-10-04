@@ -1,0 +1,71 @@
+---
+import { getMethodology } from '../lib/content';
+
+interface Props {
+  currentId?: string;
+  currentPhase?: string;
+}
+
+const { currentId, currentPhase } = Astro.props;
+const items = await getMethodology();
+const categories = [...new Set(items.map((i) => i.data.phase))];
+
+const group = currentPhase
+  ? items.filter((i) => i.data.phase === currentPhase)
+  : items;
+---
+
+<nav aria-label="Methodology sections" class="space-y-6">
+  <a href="/methodology" class="section-eyebrow mb-2">Methodology</a>
+
+  {currentPhase ? (
+    <div>
+      <p class="mb-2 flex items-center justify-between font-mono text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-ink-500">
+        <span class="text-accent-400">{currentPhase}</span>
+        <span>{group.length}</span>
+      </p>
+      <ul class="max-h-[60vh] space-y-1 overflow-y-auto border-l border-ink-700 pr-1">
+        {group.map((item) => {
+          const active = item.id === currentId;
+          return (
+            <li>
+              <a
+                href={`/methodology/${item.id}`}
+                class={`-ml-px block border-l-2 px-3 py-1.5 text-sm leading-snug transition-colors ${
+                  active
+                    ? 'border-accent-500 bg-ink-800/60 text-accent-300'
+                    : 'border-transparent text-ink-400 hover:border-ink-400 hover:text-ink-100'
+                }`}
+                aria-current={active ? 'page' : undefined}
+              >
+                {item.data.title}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  ) : (
+    <div>
+      <p class="mb-2 font-mono text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-ink-500">
+        Categories
+      </p>
+      <ul class="space-y-1 border-l border-ink-700">
+        {categories.map((phase) => {
+          const count = items.filter((i) => i.data.phase === phase).length;
+          return (
+            <li>
+              <a
+                href={`/methodology?category=${encodeURIComponent(phase)}`}
+                class="-ml-px flex items-center justify-between border-l-2 border-transparent px-3 py-1.5 text-sm text-ink-400 transition-colors hover:border-ink-400 hover:text-ink-100"
+              >
+                <span>{phase}</span>
+                <span class="font-mono text-xs text-ink-500">{count}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  )}
+</nav>

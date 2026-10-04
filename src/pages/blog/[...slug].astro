@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getBlogPosts, formatDate, readingMinutes, slugifyTag } from '../../lib/content';
+import { render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getBlogPosts();
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const minutes = readingMinutes(post.body);
+const posts = await getBlogPosts();
+const idx = posts.findIndex((p) => p.id === post.id);
+const prev = posts[idx + 1];
+const next = posts[idx - 1];
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  ogType="article"
+>
+
+  <article class="container-page max-w-3xl py-12 md:py-16">
+    <nav class="mb-6 flex items-center gap-2 font-mono text-xs text-ink-500">
+      <a href="/blog" class="link-accent">~/blog</a>
+      <span>/</span>
+      <span class="truncate text-ink-400">{post.id}</span>
+    </nav>
+
+    <header class="mb-10">
+      <h1 class="text-3xl font-extrabold leading-tight tracking-tight text-ink-100 md:text-4xl">
+        {post.data.title}
+      </h1>
+
+      <div class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-ink-400">
+        <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+        <span class="text-ink-600">·</span>
+        <span>{minutes} min read</span>
+        {post.data.updated && (
+          <>
+            <span class="text-ink-600">·</span>
+            <span class="text-accent-400">updated {formatDate(post.data.updated)}</span>
+          </>
+        )}
+      </div>
+
+      {post.data.description && (
+        <p class="mt-5 border-l-2 border-accent-500 pl-4 text-base leading-relaxed text-ink-300">
+          {post.data.description}
+        </p>
+      )}
+
+      <div class="mt-5 flex flex-wrap gap-1.5">
+        {post.data.tags.map((tag) => (
+          <a href={`/blog/tags/${slugifyTag(tag)}`} class="chip">
+            #{tag}
+          </a>
+        ))}
+      </div>
+    </header>
+
+    <div class="prose prose-custom max-w-none" data-pagefind-body>
+      <Content />
+    </div>
+
+    <nav aria-label="Posts navigation" class="mt-14 grid gap-4 border-t border-ink-800 pt-8 sm:grid-cols-2">
+      {
+        next ? (
+          <a href={`/blog/${next.id}`} class="card flex flex-col gap-1 p-4">
+            <span class="font-mono text-[0.65rem] uppercase tracking-widest text-ink-500">← next post</span>
+            <span class="text-sm font-semibold text-ink-100">{next.data.title}</span>
+          </a>
+        ) : (
+          <span></span>
+        )
+      }
+      {
+        prev && (
+          <a href={`/blog/${prev.id}`} class="card flex flex-col items-end gap-1 p-4 text-right">
+            <span class="font-mono text-[0.65rem] uppercase tracking-widest text-ink-500">prev post →</span>
+            <span class="text-sm font-semibold text-ink-100">{prev.data.title}</span>
+          </a>
+        )
+      }
+    </nav>
+  </article>
+
+</BaseLayout>

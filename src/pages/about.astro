@@ -1,0 +1,151 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { ROLES, SITE } from '../lib/site';
+
+const tooling = [
+  { name: 'Engineering', items: ['Next.js', 'NestJS', 'Laravel', 'TypeScript', 'Tailwind CSS', 'Firebase', 'MongoDB', 'MariaDB'] },
+  { name: 'Web Testing', items: ['Burp Suite', 'Nuclei', 'ffuf', 'sqlmap', 'OWASP ZAP', 'Caido'] },
+  { name: 'Recon & OSINT', items: ['subfinder', 'amass', 'theHarvester', 'gobuster', 'Shodan', 'Censys'] },
+  { name: 'Offensive', items: ['Metasploit', 'impacket', 'hashcat', 'BloodHound', 'Nmap'] },
+] as const;
+
+const principles = [
+  {
+    title: 'Attack with intent',
+    body: 'I break things to understand failure modes, then feed the lessons straight back into design, code review and test suites.',
+  },
+  {
+    title: 'Automate the boring parts',
+    body: 'As an SDET I turn fragile manual checks into deterministic automation — the same discipline applies to recon and scanning.',
+  },
+  {
+    title: 'Hunt ethically',
+    body: 'Every finding is validated, scoped and reported before it can become someone else\'s CVE. Disclosure is a feature, not an afterthought.',
+  },
+] as const;
+
+const timeline = [
+  {
+    role: 'Security Researcher',
+    org: 'Bug bounty programs · HackerOne',
+    range: 'ongoing',
+    points: ['Multi-program coverage: web, API, mobile.', 'Reproducible, business-impact-focused reports.'],
+  },
+  {
+    role: 'Application Security',
+    org: 'Freelance',
+    range: 'ongoing',
+    points: ['Threat modeling and secure code review.', 'Patching, hardening and CVE triage.'],
+  },
+  {
+    role: 'SDET / Quality Engineer',
+    org: 'Freelance',
+    range: 'ongoing',
+    points: ['API & E2E test automation at scale.', 'Shift-left testing inside CI/CD.'],
+  },
+  {
+    role: 'Software Engineer',
+    org: 'Freelance',
+    range: 'ongoing',
+    points: ['Full-stack web and mobile apps.', 'Security as a default rather than a phase.'],
+  },
+] as const;
+---
+
+<BaseLayout
+  title="About"
+  description={`About ${SITE.author} — Software Engineer, SDET, Application Security engineer and Security Researcher.`}
+>
+  <PageHeader
+    eyebrow="~/about"
+    title="Hi, I'm Wahyudi."
+    description="Software engineer by trade, attacker by curiosity. I specialize in building reliable, testable software and in finding where it breaks."
+    meta={ROLES.join(' · ')}
+  />
+
+  <section class="container-page grid gap-12 py-12 md:py-16 lg:grid-cols-[1.4fr_1fr]">
+    <div>
+      <h2 class="text-xl font-bold text-ink-100">The short version</h2>
+      <div class="prose prose-custom mt-5 max-w-none">
+        <p>
+          I'm a software engineer who spent years writing production code and test
+          automation, then turned that understanding toward breaking the same kind of
+          systems defensively. As an <strong>SDET</strong> I build automated test
+          infrastructure that blocks regressions early; as an
+          <strong>Application Security</strong> engineer I review, harden and pentest
+          them; as a <strong>Security Researcher</strong> I hunt real bugs across bug
+          bounty programs and walk every finding through responsible disclosure.
+        </p>
+        <p>
+          The methodology section is a living document — every procedure started as a
+          note taken while testing a production target. This is the same playbook I
+          follow on scoped engagements and bounty programs, and it doubles as my
+          research log.
+        </p>
+      </div>
+
+      <h2 class="mt-12 text-xl font-bold text-ink-100">What I optimize for</h2>
+      <div class="mt-5 grid gap-4 sm:grid-cols-3">
+        {
+          principles.map((p) => (
+            <div class="card p-5">
+              <span class="font-mono text-xs text-accent-400">↳ {p.title}</span>
+              <p class="mt-2 text-sm leading-relaxed text-ink-400">{p.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <aside class="space-y-8 self-start lg:sticky lg:top-24">
+      <div class="card p-6">
+        <p class="section-eyebrow mb-4" data-style="2">Credentials</p>
+        <ul class="space-y-3">
+          <li class="flex items-center justify-between text-sm"><span class="text-ink-400">Name</span><span class="font-mono text-ink-100">Wahyudi</span></li>
+          <li class="flex items-center justify-between text-sm"><span class="text-ink-400">Handle</span><a class="link-accent font-mono" href="/">@{SITE.handle}</a></li>
+          <li class="flex items-center justify-between text-sm"><span class="text-ink-400">Email</span><a class="link-accent font-mono" href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+          <li class="flex items-center justify-between text-sm"><span class="text-ink-400">HackerOne</span><a class="link-accent font-mono" href={SITE.socials.hackerone} target="_blank" rel="noopener">wint3rcold ↗</a></li>
+        </ul>
+      </div>
+
+      <div class="card p-6">
+        <p class="section-eyebrow mb-4" data-style="3">Tooling</p>
+        {
+          tooling.map((group) => (
+            <div class="mb-4 last:mb-0">
+              <p class="font-mono text-xs text-ink-500">{group.name}</p>
+              <div class="mt-2 flex flex-wrap gap-1.5">
+                {group.items.map((t) => <span class="chip">{t}</span>)}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </aside>
+  </section>
+
+  <section class="border-t border-ink-800 bg-ink-900/40">
+    <div class="container-page py-12 md:py-16">
+      <p class="section-eyebrow mb-8" data-style="2">Experience</p>
+      <div class="grid max-w-3xl gap-8">
+        {
+          timeline.map((t) => (
+            <div class="timeline-item">
+              <div class="flex flex-wrap items-baseline justify-between gap-2">
+                <h3 class="text-base font-bold text-ink-100">{t.role}</h3>
+                <span class="font-mono text-xs text-ink-500">{t.range}</span>
+              </div>
+              <p class="mt-0.5 font-mono text-xs text-accent-400">{t.org}</p>
+              <ul class="mt-3 space-y-1.5 text-sm text-ink-400">
+                {t.points.map((pt) => (
+                  <li class="flex gap-2"><span class="text-accent-400">▸</span><span>{pt}</span></li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>

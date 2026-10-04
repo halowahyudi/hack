@@ -1,0 +1,56 @@
+---
+import { formatDate, readingMinutes, type BlogPost } from '../lib/content';
+
+interface Props {
+  post: BlogPost;
+}
+
+const { post } = Astro.props;
+const minutes = readingMinutes(post.body);
+---
+
+<article class="card group relative flex h-full flex-col gap-3 p-5">
+  <a
+    href={`/blog/${post.id}`}
+    class="absolute inset-0 z-0 rounded-[inherit]"
+    aria-label={`Read: ${post.data.title}`}
+    data-pagefind-meta={`title=${post.data.title}`}
+  />
+
+  <div class="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[0.68rem] text-ink-400">
+    <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+    <span aria-hidden="true">·</span>
+    <span>{minutes} min read</span>
+    {post.data.updated && (
+      <>
+        <span aria-hidden="true">·</span>
+        <span class="text-accent-300">updated</span>
+      </>
+    )}
+  </div>
+
+  <h3 class="text-lg font-bold leading-snug text-ink-100 transition-colors group-hover:text-accent-300">
+    {post.data.title}
+  </h3>
+
+  <p class="flex-1 text-sm leading-relaxed text-ink-400">
+    {post.data.description ?? 'A writeup from the field.'}
+  </p>
+
+  <div class="mt-auto flex flex-wrap items-center justify-between gap-3">
+    <div class="flex flex-wrap items-center gap-1.5">
+      {post.data.tags.slice(0, 3).map((tag) => (
+        <a
+          href={`/blog/tags/${tag.toLowerCase().replace(/\s+/g, '-')}`}
+          class="chip relative z-10 transition-colors hover:border-accent-500 hover:text-accent-300"
+        >
+          {tag}
+        </a>
+      ))}
+    </div>
+
+    <span class="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-accent-400 transition-colors group-hover:text-accent-300">
+      read →
+    </span>
+  </div>
+</article>

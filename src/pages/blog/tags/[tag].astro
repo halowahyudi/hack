@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PageHeader from '../../../components/PageHeader.astro';
+import PostCard from '../../../components/PostCard.astro';
+import { getBlogPosts, slugifyTag } from '../../../lib/content';
+
+export async function getStaticPaths() {
+  const posts = await getBlogPosts();
+  const tags = new Set(posts.flatMap((p) => p.data.tags));
+  return [...tags].map((tag) => ({
+    params: { tag: slugifyTag(tag) },
+    props: { tag },
+  }));
+}
+
+const { tag } = Astro.props;
+const posts = (await getBlogPosts()).filter((p) => p.data.tags.some((t) => slugifyTag(t) === tag));
+---
+
+<BaseLayout title={`#${tag}`} noindex>
+  <PageHeader
+    eyebrow="~/blog/tags"
+    title={`#${tag}`}
+    description={`${posts.length} post${posts.length > 1 ? 's' : ''} tagged with ${tag}.`}
+    meta="topic index"
+  />
+
+  <section class="container-page py-12">
+    {
+      posts.length === 0 ? (
+        <p class="text-sm text-ink-500">No posts under this tag yet.</p>
+      ) : (
+        <div class="grid gap-5 md:grid-cols-2">
+          {posts.map((post) => <PostCard post={post} />)}
+        </div>
+      )
+    }
+  </section>
+</BaseLayout>

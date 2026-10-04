@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getProjects } from '../../lib/content';
+
+const projects = await getProjects();
+const byType = [
+  { type: 'tool', label: 'Tools & Utilities' },
+  { type: 'webapp', label: 'Web Applications' },
+  { type: 'automation', label: 'Automation' },
+  { type: 'research', label: 'Security Research' },
+  { type: 'library', label: 'Libraries' },
+] as const;
+---
+
+<BaseLayout
+  title="Projects"
+  description="Tools, applications and research I've built — from security tooling to test automation."
+>
+  <PageHeader
+    eyebrow="~/projects"
+    title="Things I've built."
+    description="A mix of security research infrastructure, developer tools, test automation and production web apps."
+    meta={`${projects.length} projects · mostly open source`}
+  />
+
+  <section class="container-page py-12">
+    {
+      byType.map((group) => {
+        const list = projects.filter((p) => p.data.type === group.type);
+        if (list.length === 0) return null;
+        return (
+          <div class="mb-12">
+            <h2 class="mb-5 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-accent-400">
+              → {group.label}
+            </h2>
+            <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {list.map((project) => <ProjectCard project={project} />)}
+            </div>
+          </div>
+        );
+      })
+    }
+  </section>
+</BaseLayout>

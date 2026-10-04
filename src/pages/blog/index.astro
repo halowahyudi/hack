@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import PostCard from '../../components/PostCard.astro';
+import { collectTags, getBlogPosts, slugifyTag } from '../../lib/content';
+
+const posts = await getBlogPosts();
+const tags = collectTags(posts);
+const years = [...new Set(posts.map((p) => p.data.pubDate.getUTCFullYear()))].sort((a, b) => b - a);
+---
+
+<BaseLayout
+  title="Blog"
+  description="Security writeups, pentesting notes, SDET automation lessons and engineering essays."
+>
+  <PageHeader
+    eyebrow="~/blog"
+    title="Security, in writing."
+    description="Writeups from real engagements, tested automation patterns and engineering essays. Long-form notes over hot takes."
+    meta={`${posts.length} posts · ${tags.length} tags · ${years.join(' — ')}`}
+  />
+
+  <section class="container-page grid gap-10 py-12 md:py-16 lg:grid-cols-[1fr_16rem]">
+    <div>
+      {posts.length === 0 ? (
+        <p class="rounded-lg border border-ink-700 bg-ink-850 p-8 text-sm text-ink-400">
+          Posts are being drafted. Check back soon.
+        </p>
+      ) : (
+        <div class="grid gap-5 md:grid-cols-2">
+          {posts.map((post) => <PostCard post={post} />)}
+        </div>
+      )}
+    </div>
+
+    <aside class="lg:sticky lg:top-24 self-start">
+      <p class="section-eyebrow mb-3" data-style="2">Tags</p>
+      <div class="flex flex-wrap gap-1.5">
+        {tags.map(({ tag, count }) => (
+          <a href={`/blog/tags/${slugifyTag(tag)}`} class="chip hover:border-accent-500">
+            #{tag} {count}
+          </a>
+        ))}
+      </div>
+      <div class="mt-6">
+        <p class="section-eyebrow mb-3" data-style="3">RSS</p>
+        <a href="/rss.xml" class="link-accent font-mono text-sm">subscribe via RSS →</a>
+      </div>
+    </aside>
+  </section>
+</BaseLayout>
