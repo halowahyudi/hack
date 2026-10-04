@@ -80,27 +80,42 @@ const { title = 'Search wahyudi.dev' } = Astro.props;
 
   let pagefind: any = null;
   const pagefindUrl = '/pagefind/pagefind.js';
-  type Result = { data: { url: string; meta: { title: string; description?: string }; anchors?: { url: string; element: string; text: string }[] } };
+  type LoadedResult = {
+    url: string;
+    meta: { title?: string; description?: string };
+    excerpt?: string;
+    sub_results?: { title: string; url: string; excerpt: string }[];
+  };
 
-  const render = (results: Result[], query: string) => {
+  const render = (loaded: LoadedResult[], query: string) => {
     resultsEl!.innerHTML = '';
-    if (results.length === 0) {
+    if (loaded.length === 0) {
       statusEl!.textContent = `No results for “${query}”.`;
       return;
     }
-    statusEl!.textContent = `${results.length} result${results.length > 1 ? 's' : ''} for “${query}”`;
-    for (const r of results) {
+    statusEl!.textContent = `${loaded.length} result${loaded.length > 1 ? 's' : ''} for “${query}”`;
+
+    for (const r of loaded) {
       const li = document.createElement('li');
+
       const a = document.createElement('a');
-      a.href = r.data.url;
+      a.href = r.url;
       a.className = 'block rounded-lg px-3 py-2.5 transition-colors hover:bg-ink-800';
+
       const title = document.createElement('p');
       title.className = 'text-sm font-semibold text-ink-100';
-      title.textContent = r.data.meta.title;
+      title.textContent = r.meta?.title || r.url;
+
       const desc = document.createElement('p');
       desc.className = 'mt-0.5 text-xs leading-relaxed text-ink-400';
-      desc.textContent = r.data.meta.description ?? '';
-      a.append(title, desc);
+      if (r.meta?.description) {
+        desc.textContent = r.meta.description;
+      } else if (r.excerpt) {
+        desc.innerHTML = r.excerpt;
+      }
+
+      a.append(title);
+      if (desc.textContent || desc.innerHTML) a.append(desc);
       li.appendChild(a);
       resultsEl!.appendChild(li);
     }
@@ -126,7 +141,8 @@ const { title = 'Search wahyudi.dev' } = Astro.props;
           }
         }
         const search = await pagefind.search(q);
-        render(search.results, q);
+        const loaded = (await Promise.all(search.results.map((r: any) => r.data()))) as LoadedResult[];
+        render(loaded, q);
       } catch (e) {
         statusEl!.textContent = 'Search index unavailable. Run `npm run build` to generate it.';
         console.warn('pagefind unavailable:', e);
