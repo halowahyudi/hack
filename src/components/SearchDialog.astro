@@ -118,7 +118,13 @@ const { title = 'Search wahyudi.dev' } = Astro.props;
     statusEl!.textContent = 'Searching index…';
     timer = setTimeout(async () => {
       try {
-        pagefind ??= await import(/* @vite-ignore */ pagefindUrl);
+        if (!pagefind) {
+          const dynamicImport = new Function('p', 'return import(p)') as (p: string) => Promise<any>;
+          pagefind = await dynamicImport(pagefindUrl);
+          if (typeof pagefind.options === 'function') {
+            await pagefind.options({ baseUrl: '/pagefind/' });
+          }
+        }
         const search = await pagefind.search(q);
         render(search.results, q);
       } catch (e) {
