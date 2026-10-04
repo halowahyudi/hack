@@ -16,7 +16,14 @@ const { Content } = await render(project);
 const statusLabel = { active: 'active', maintained: 'maintained', archived: 'archived' }[project.data.status];
 ---
 
-<BaseLayout title={project.data.title} description={project.data.description}>
+<BaseLayout
+  title={project.data.title}
+  description={project.data.description}
+  ogType="article"
+  publishedTime={project.data.pubDate}
+  modifiedTime={project.data.updated ?? project.data.pubDate}
+  tags={project.data.tags}
+>
 
   <article class="container-page max-w-3xl py-12 md:py-16">
     <nav class="mb-6 flex items-center gap-2 font-mono text-xs text-ink-500">

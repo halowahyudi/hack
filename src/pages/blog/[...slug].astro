@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getBlogPosts, formatDate, readingMinutes, slugifyTag } from '../../lib/content';
+import { getBlogPosts, formatDate, readingMinutes, slugifyTag, ogImageFor } from '../../lib/content';
 import { render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -24,6 +24,9 @@ const next = posts[idx - 1];
   title={post.data.title}
   description={post.data.description}
   ogType="article"
+  publishedTime={post.data.pubDate}
+  modifiedTime={post.data.updated ?? post.data.pubDate}
+  tags={post.data.tags}
 >
 
   <article class="container-page max-w-3xl py-12 md:py-16">
@@ -34,6 +37,16 @@ const next = posts[idx - 1];
     </nav>
 
     <header class="mb-10">
+      <div class="mb-6 overflow-hidden rounded-xl border border-ink-700 bg-ink-900">
+        <img
+          src={ogImageFor('blog', post.id)}
+          alt={post.data.title}
+          width="1200"
+          height="630"
+          class="h-full w-full object-cover"
+        />
+      </div>
+
       <h1 class="text-3xl font-extrabold leading-tight tracking-tight text-ink-100 md:text-4xl">
         {post.data.title}
       </h1>

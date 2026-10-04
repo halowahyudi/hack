@@ -28,6 +28,10 @@ export function readingMinutes(body: string | undefined): number {
   return Math.max(1, Math.round(words / 200));
 }
 
+export function ogImageFor(section: string, id: string): string {
+  return `/og/${section}/${id}.png`;
+}
+
 export async function getBlogPosts(): Promise<BlogPost[]> {
   const posts = await getCollection('blog', isPublishedInProd);
   return posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());

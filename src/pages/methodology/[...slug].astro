@@ -22,6 +22,9 @@ const updated = item.data.updated || new Date();
   title={item.data.title}
   description={item.data.description}
   ogType="article"
+  publishedTime={item.data.updated ?? new Date()}
+  modifiedTime={item.data.updated ?? new Date()}
+  tags={item.data.tags}
 >
   <div class="container-page grid gap-10 py-10 md:py-14 lg:grid-cols-[15rem_1fr]">
     <aside class="hidden lg:block">

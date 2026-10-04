@@ -13,7 +13,12 @@ export default defineConfig({
       wrap: false,
     },
   },
-  integrations: [mdx(), sitemap()],
+  integrations: [
+    mdx(),
+    sitemap({
+      filter: (page) => !page.includes('/blog/tags/') && !page.endsWith('/404'),
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },

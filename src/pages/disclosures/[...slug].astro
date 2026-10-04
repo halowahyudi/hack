@@ -33,6 +33,9 @@ const meta = [
   title={disclosure.data.title}
   description={disclosure.data.description}
   ogType="article"
+  publishedTime={disclosure.data.pubDate}
+  modifiedTime={disclosure.data.updated ?? disclosure.data.pubDate}
+  tags={disclosure.data.tags}
 >
   <article class="container-page max-w-3xl py-12 md:py-16">
     <nav class="mb-6 flex items-center gap-2 font-mono text-xs text-ink-500">
