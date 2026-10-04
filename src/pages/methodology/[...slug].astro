@@ -37,8 +37,8 @@ const updated = item.data.updated || new Date();
       <MethodologySidebar currentId={item.id} currentPhase={item.data.phase} />
     </div>
 
-    <article class="min-w-0">
-      <nav class="mb-4 flex items-center gap-2 font-mono text-xs text-ink-500">
+    <article class="min-w-0" data-pagefind-body>
+      <nav class="mb-4 flex items-center gap-2 font-mono text-xs text-ink-500" data-pagefind-ignore>
         <a href="/methodology" class="link-accent">~/methodology</a>
         <span>/</span>
         <a href={`/methodology?category=${encodeURIComponent(item.data.phase)}`} class="link-accent">{item.data.phase}</a>
@@ -47,7 +47,7 @@ const updated = item.data.updated || new Date();
       </nav>
 
       <header class="mb-8">
-        <div class="flex flex-wrap items-center gap-2">
+        <div class="flex flex-wrap items-center gap-2" data-pagefind-ignore>
           <a href={`/methodology?category=${encodeURIComponent(item.data.phase)}`} class="chip" data-accent="true">{item.data.phase}</a>
           {updated && (
             <span class="ml-auto font-mono text-[0.68rem] text-ink-500">
@@ -56,24 +56,24 @@ const updated = item.data.updated || new Date();
           )}
         </div>
 
-        <h1 class="mt-4 text-3xl font-extrabold tracking-tight text-ink-100 md:text-4xl">
+        <h1 class="mt-4 text-3xl font-extrabold tracking-tight text-ink-100 md:text-4xl" data-pagefind-meta="title">
           {item.data.title}
         </h1>
-        <p class="mt-4 max-w-2xl text-base leading-relaxed text-ink-400">{item.data.description}</p>
+        <p class="mt-4 max-w-2xl text-base leading-relaxed text-ink-400" data-pagefind-meta="description">{item.data.description}</p>
 
         {item.data.tools.length > 0 && (
-          <div class="mt-6 flex flex-wrap items-center gap-2">
+          <div class="mt-6 flex flex-wrap items-center gap-2" data-pagefind-ignore>
             <span class="font-mono text-xs text-ink-500">toolbox:</span>
-            {item.data.tools.map((t) => <span class="chip">{t}</span>)}
+            {item.data.tools.map((t) => <span class="chip" data-pagefind-weight="0">{t}</span>)}
           </div>
         )}
       </header>
 
-      <div class="prose prose-custom max-w-none" data-pagefind-body>
+      <div class="prose prose-custom max-w-none">
         <Content />
       </div>
 
-      <div class="mt-10">
+      <div class="mt-10" data-pagefind-ignore>
         <PrevNext currentId={item.id} phase={item.data.phase} />
       </div>
     </article>

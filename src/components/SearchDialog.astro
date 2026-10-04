@@ -136,9 +136,6 @@ const { title = 'Search wahyudi.dev' } = Astro.props;
         if (!pagefind) {
           const dynamicImport = new Function('p', 'return import(p)') as (p: string) => Promise<any>;
           pagefind = await dynamicImport(pagefindUrl);
-          if (typeof pagefind.options === 'function') {
-            await pagefind.options({ baseUrl: '/pagefind/' });
-          }
         }
         const search = await pagefind.search(q);
         const loaded = (await Promise.all(search.results.map((r: any) => r.data()))) as LoadedResult[];

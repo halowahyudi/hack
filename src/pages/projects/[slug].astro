@@ -25,15 +25,15 @@ const statusLabel = { active: 'active', maintained: 'maintained', archived: 'arc
   tags={project.data.tags}
 >
 
-  <article class="container-page max-w-3xl py-12 md:py-16">
-    <nav class="mb-6 flex items-center gap-2 font-mono text-xs text-ink-500">
+  <article class="container-page max-w-3xl py-12 md:py-16" data-pagefind-body>
+    <nav class="mb-6 flex items-center gap-2 font-mono text-xs text-ink-500" data-pagefind-ignore>
       <a href="/projects" class="link-accent">~/projects</a>
       <span>/</span>
       <span class="text-ink-400">{project.id}</span>
     </nav>
 
     <header class="mb-8">
-      <div class="mb-4 flex items-center gap-3">
+      <div class="mb-4 flex items-center gap-3" data-pagefind-ignore>
         <span class="font-mono text-2xl text-accent-400" aria-hidden="true">{project.data.icon}</span>
         <span class="chip" data-status={project.data.status}>
           <span class="status-dot" data-status={project.data.status} aria-hidden="true"></span>
@@ -42,12 +42,12 @@ const statusLabel = { active: 'active', maintained: 'maintained', archived: 'arc
         <span class="chip" data-accent="true">{project.data.type}</span>
       </div>
 
-      <h1 class="text-3xl font-extrabold tracking-tight text-ink-100 md:text-4xl">
+      <h1 class="text-3xl font-extrabold tracking-tight text-ink-100 md:text-4xl" data-pagefind-meta="title">
         {project.data.title}
       </h1>
-      <p class="mt-4 max-w-2xl text-base leading-relaxed text-ink-400">{project.data.description}</p>
+      <p class="mt-4 max-w-2xl text-base leading-relaxed text-ink-400" data-pagefind-meta="description">{project.data.description}</p>
 
-      <div class="mt-6 flex flex-wrap gap-3">
+      <div class="mt-6 flex flex-wrap gap-3" data-pagefind-ignore>
         {project.data.repo && (
           <a href={project.data.repo} class="btn btn-ghost" target="_blank" rel="noopener">↗ repository</a>
         )}
@@ -62,20 +62,20 @@ const statusLabel = { active: 'active', maintained: 'maintained', archived: 'arc
         )}
       </div>
 
-      <div class="mt-7 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-ink-500">
+      <div class="mt-7 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-ink-500" data-pagefind-ignore>
         <span>started {formatDate(project.data.pubDate)}</span>
         {project.data.updated && <span>updated {formatDate(project.data.updated)}</span>}
       </div>
     </header>
 
     {project.data.stack.length > 0 && (
-      <div class="mb-6 flex flex-wrap items-center gap-2">
+      <div class="mb-6 flex flex-wrap items-center gap-2" data-pagefind-ignore>
         <span class="font-mono text-xs text-ink-500">stack:</span>
         {project.data.stack.map((s) => <span class="chip">{s}</span>)}
       </div>
     )}
 
-    <div class="prose prose-custom max-w-none" data-pagefind-body>
+    <div class="prose prose-custom max-w-none">
       <Content />
     </div>
   </article>

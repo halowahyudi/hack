@@ -37,25 +37,25 @@ const meta = [
   modifiedTime={disclosure.data.updated ?? disclosure.data.pubDate}
   tags={disclosure.data.tags}
 >
-  <article class="container-page max-w-3xl py-12 md:py-16">
-    <nav class="mb-6 flex items-center gap-2 font-mono text-xs text-ink-500">
+  <article class="container-page max-w-3xl py-12 md:py-16" data-pagefind-body>
+    <nav class="mb-6 flex items-center gap-2 font-mono text-xs text-ink-500" data-pagefind-ignore>
       <a href="/disclosures" class="link-accent">~/disclosures</a>
       <span>/</span>
       <span class="truncate text-ink-400">{disclosure.id}</span>
     </nav>
 
     <header class="mb-10">
-      <div class="mb-4 flex flex-wrap items-center gap-2">
+      <div class="mb-4 flex flex-wrap items-center gap-2" data-pagefind-ignore>
         <span class={`chip border ${sev.className}`}>{sev.label}</span>
         {disclosure.data.redacted && <span class="chip border-amber-500/40 text-amber-400">redacted</span>}
         {disclosure.data.featured && <span class="chip">featured</span>}
       </div>
 
-      <h1 class="text-3xl font-extrabold leading-tight tracking-tight text-ink-100 md:text-4xl">
+      <h1 class="text-3xl font-extrabold leading-tight tracking-tight text-ink-100 md:text-4xl" data-pagefind-meta="title">
         {disclosure.data.title}
       </h1>
 
-      <div class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-ink-400">
+      <div class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-ink-400" data-pagefind-ignore>
         <time datetime={disclosure.data.pubDate.toISOString()}>{formatDate(disclosure.data.pubDate)}</time>
         <span class="text-ink-600">·</span>
         <span>{minutes} min read</span>
@@ -67,11 +67,11 @@ const meta = [
         )}
       </div>
 
-      <p class="mt-5 border-l-2 border-accent-500 pl-4 text-base leading-relaxed text-ink-300">
+      <p class="mt-5 border-l-2 border-accent-500 pl-4 text-base leading-relaxed text-ink-300" data-pagefind-meta="description">
         {disclosure.data.description}
       </p>
 
-      <dl class="mt-6 grid grid-cols-2 gap-x-4 gap-y-3 border-y border-ink-800 py-4 sm:grid-cols-4">
+      <dl class="mt-6 grid grid-cols-2 gap-x-4 gap-y-3 border-y border-ink-800 py-4 sm:grid-cols-4" data-pagefind-ignore>
         {
           meta.map((m) => (
             <div>
@@ -82,25 +82,25 @@ const meta = [
         }
       </dl>
 
-      <div class="mt-5 flex flex-wrap gap-1.5">
+      <div class="mt-5 flex flex-wrap gap-1.5" data-pagefind-ignore>
         {disclosure.data.tags.map((tag) => (
           <a href={`/blog/tags/${tag.toLowerCase().replace(/\s+/g, '-')}`} class="chip">#{tag}</a>
         ))}
       </div>
     </header>
 
-    <div class="mb-8 rounded-lg border border-ink-700 bg-ink-850 p-4">
+    <div class="mb-8 rounded-lg border border-ink-700 bg-ink-850 p-4" data-pagefind-ignore>
       <p class="font-mono text-xs leading-relaxed text-ink-400">
         <span class="text-amber-400">note —</span> details withheld under coordinated disclosure.
         No exploit code, endpoint paths or reproduction steps are published.
       </p>
     </div>
 
-    <div class="prose prose-custom max-w-none" data-pagefind-body>
+    <div class="prose prose-custom max-w-none">
       <Content />
     </div>
 
-    <nav aria-label="Disclosures navigation" class="mt-14 grid gap-4 border-t border-ink-800 pt-8 sm:grid-cols-2">
+    <nav aria-label="Disclosures navigation" class="mt-14 grid gap-4 border-t border-ink-800 pt-8 sm:grid-cols-2" data-pagefind-ignore>
       {
         next ? (
           <a href={`/disclosures/${next.id}`} class="card flex flex-col gap-1 p-4">
