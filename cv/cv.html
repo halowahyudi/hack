@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Wahyudi — CV</title>
+<style>
+  @page { size: A4; margin: 11mm 12mm 10mm; }
+
+  :root {
+    --ink: #11161f;
+    --muted: #5b6675;
+    --line: #dfe4ea;
+    --accent: #c0392b;
+    --accent-soft: #f4e6e4;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    color: var(--ink);
+    font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+    font-size: 9.6pt;
+    line-height: 1.34;
+  }
+
+  a { color: var(--ink); text-decoration: none; }
+
+  header { border-bottom: 2px solid var(--ink); padding-bottom: 7px; margin-bottom: 10px; }
+
+  h1 {
+    font-size: 19pt;
+    margin: 0 0 2px;
+    letter-spacing: -0.02em;
+  }
+
+  .tagline {
+    font-size: 10pt;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+    margin-bottom: 6px;
+  }
+
+  .contact {
+    font-size: 9pt;
+    color: var(--muted);
+  }
+  .contact span { white-space: nowrap; }
+  .contact .sep { color: var(--line); margin: 0 6px; }
+
+  section { margin-bottom: 9px; }
+
+  h2 {
+    font-size: 9.8pt;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 2px;
+    margin: 0 0 5px;
+  }
+
+  p { margin: 0 0 6px; }
+  p.summary { color: #2b3440; }
+
+  .role { margin-bottom: 7px; }
+  .role-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .role-title { font-weight: 700; font-size: 10.5pt; }
+  .role-org { color: var(--muted); font-size: 9.5pt; }
+  .role-range { color: var(--muted); font-size: 9pt; white-space: nowrap; }
+
+  ul { margin: 4px 0 0; padding-left: 16px; }
+  li { margin-bottom: 2px; color: #2b3440; }
+
+  .skills { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 22px; }
+  .skill-row { font-size: 9.5pt; }
+  .skill-row .label { font-weight: 700; }
+  .skill-row .val { color: #2b3440; }
+
+  .project { margin-bottom: 5px; }
+  .project-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .project-title { font-weight: 700; }
+  .project-links { color: var(--muted); font-size: 8.5pt; white-space: nowrap; }
+  .project-desc { color: #2b3440; font-size: 9.5pt; }
+  .project-stack { color: var(--muted); font-size: 8.5pt; }
+
+  .disclosure { margin-bottom: 5px; font-size: 9.5pt; }
+  .sev {
+    display: inline-block;
+    font-size: 7.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-radius: 3px;
+    padding: 1px 5px;
+    margin-right: 6px;
+    vertical-align: 1px;
+  }
+  .disc-target { font-weight: 700; }
+
+  footer { border-top: 1px solid var(--line); margin-top: 4px; padding-top: 6px; color: var(--muted); font-size: 8.5pt; }
+
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <h1>Wahyudi</h1>
+    <div class="tagline">Software Engineer · SDET · Application Security · Security Researcher</div>
+    <div class="contact">
+      <span>hi@wahyudi.dev</span><span class="sep">·</span>
+      <span>wahyudi.dev</span><span class="sep">·</span>
+      <span>github.com/halowahyudi</span><span class="sep">·</span>
+      <span>hackerone.com/wint3rcold</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>Summary</h2>
+    <p class="summary">
+      Security-minded software engineer who builds reliable, testable software and then attacks it
+      before adversaries do. I work across the full lifecycle — full-stack product engineering, test
+      automation, application security and offensive research — with a bias toward reproducible,
+      business-impact-focused findings and coordinated disclosure.
+    </p>
+  </section>
+
+  <section>
+    <h2>Experience</h2>
+
+    <div class="role">
+      <div class="role-head">
+        <span><span class="role-title">Security Researcher</span> <span class="role-org">— Bug bounty programs · HackerOne</span></span>
+        <span class="role-range">Ongoing</span>
+      </div>
+      <ul>
+        <li>Report multi-program web, API and mobile vulnerabilities, validated and scoped before disclosure.</li>
+        <li>Produced reproducible, business-impact-focused reports; findings include authentication bypass, broken access control, SSRF and OAuth/token weaknesses.</li>
+      </ul>
+    </div>
+
+    <div class="role">
+      <div class="role-head">
+        <span><span class="role-title">Application Security</span> <span class="role-org">— Freelance</span></span>
+        <span class="role-range">Ongoing</span>
+      </div>
+      <ul>
+        <li>Threat modeling and secure code review across web and API codebases.</li>
+        <li>Hardening, patching and CVE triage; translate findings into concrete remediation.</li>
+      </ul>
+    </div>
+
+    <div class="role">
+      <div class="role-head">
+        <span><span class="role-title">SDET / Quality Engineer</span> <span class="role-org">— Freelance</span></span>
+        <span class="role-range">Ongoing</span>
+      </div>
+      <ul>
+        <li>Build API and end-to-end test automation at scale; replace fragile manual checks with deterministic suites.</li>
+        <li>Embed shift-left testing and quality gates inside CI/CD pipelines.</li>
+      </ul>
+    </div>
+
+    <div class="role">
+      <div class="role-head">
+        <span><span class="role-title">Software Engineer</span> <span class="role-org">— Freelance</span></span>
+        <span class="role-range">Ongoing</span>
+      </div>
+      <ul>
+        <li>Ship full-stack web applications with security as a default, not a phase.</li>
+        <li>Own delivery end to end: architecture, implementation, testing and hardening.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Selected Disclosures</h2>
+    <div class="disclosure"><span class="sev">High</span><span class="disc-target">Kaltura</span> — Email verification bypass in self-serve signup allowing unlimited unverified account provisioning.</div>
+    <div class="disclosure"><span class="sev">Medium</span><span class="disc-target">Vercel</span> — OAuth token introspection endpoint returning full token claims without caller authentication.</div>
+    <div class="disclosure"><span class="sev">Medium</span><span class="disc-target">OPPO</span> — Verification ticket delivered to an attacker page via unvalidated MessagePort adoption.</div>
+    <div class="disclosure"><span class="sev">Medium</span><span class="disc-target">NBA</span> — Client-controlled subscription and billing identity fields on a profile update endpoint.</div>
+  </section>
+
+  <section>
+    <h2>Projects</h2>
+
+    <div class="project">
+      <div class="project-head">
+        <span class="project-title">Gembok — encrypted password manager & authenticator</span>
+        <span class="project-links">gembok.dev</span>
+      </div>
+      <div class="project-desc">Zero-knowledge Android vault for passwords, cards and TOTP 2FA codes — encrypted on-device before sync, with no server-side key.</div>
+      <div class="project-stack">Kotlin · Jetpack Compose · AndroidX Biometric · Room · TOTP</div>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <span class="project-title">Spotify API Scraper — metadata scraper</span>
+        <span class="project-links">github.com/halowahyudi/spotify-api-scraper</span>
+      </div>
+      <div class="project-desc">Lightweight Spotify metadata scraper powering music-discovery experiments without heavy SDK overhead.</div>
+      <div class="project-stack">Node.js · TypeScript · Puppeteer</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Skills</h2>
+    <div class="skills">
+      <div class="skill-row"><span class="label">Engineering:</span> <span class="val">TypeScript, Next.js, NestJS, Laravel, Tailwind CSS, Firebase, MongoDB, MariaDB, PostgreSQL</span></div>
+      <div class="skill-row"><span class="label">AppSec:</span> <span class="val">Threat modeling, secure code review, OWASP Top 10, API security, SDL</span></div>
+      <div class="skill-row"><span class="label">Offensive:</span> <span class="val">Burp Suite, Nuclei, ffuf, sqlmap, Metasploit, impacket, hashcat, Nmap</span></div>
+      <div class="skill-row"><span class="label">Recon / OSINT:</span> <span class="val">subfinder, amass, theHarvester, gobuster, Shodan, Censys</span></div>
+      <div class="skill-row"><span class="label">SDET:</span> <span class="val">API & E2E automation, CI/CD quality gates, shift-left testing</span></div>
+    </div>
+  </section>
+
+  <footer>
+    Full methodology, writeups and disclosures at wahyudi.dev — available for security consulting and collaboration.
+  </footer>
+
+</body>
+</html>

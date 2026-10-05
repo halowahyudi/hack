@@ -1,46 +1,62 @@
 ---
 title: "Gembok"
-description: "A privacy-first Android app that locks sensitive applications behind the device's own biometric gate."
+description: "An end-to-end encrypted password manager and authenticator (TOTP) for Android — vaults stay locked on-device, and even the server can't open them."
 pubDate: 2026-03-01
-updated: 2026-09-10
+updated: 2026-10-05
 featured: true
 icon: 🔒
 status: maintained
-type: tool
+type: webapp
 tags:
   - android
   - kotlin
-  - privacy
-  - biometric
+  - security
+  - encryption
+  - password-manager
+  - totp
 stack:
   - Kotlin
   - Jetpack Compose
   - AndroidX Biometric
   - Room
+  - TOTP
 link: https://gembok.dev
 ---
 
-Gembok (Indonesian for *padlock*) protects the apps you don't want anyone else to open —
-messaging, banking, gallery — behind an overlay that re-arms the device biometric gate
-when a protected app is launched.
+Gembok (Indonesian for *padlock*) is a zero-knowledge password manager and
+authenticator for Android. Passwords, PINs, card data, secure notes and TOTP
+codes are encrypted on the device **before** they ever leave it — the server
+only ever stores ciphertext, and holds no key to open it.
 
 ## What it does
 
-- Scans installed apps and lets you pick what to lock with a single tap.
-- Uses the system `BiometricPrompt` rather than a custom lock screen — no stored
-  credentials beyond the Android keystore.
-- Detects when a protected app comes to the foreground and intercepts it instantly.
-- Barely any memory footprint by design: the overlay is a lightweight
-  `Service` + composition of the launcher activity.
+- **Password manager** — stores passwords, PINs, card data and notes, all
+  encrypted end to end before syncing.
+- **Authenticator (TOTP)** — generates 2FA one-time codes in the same vault,
+  supporting SHA-1/256/512, 6- or 8-digit codes and 30/60-second periods.
+  Add accounts by QR scan or manually.
+- **Biometric unlock** — open the vault with the device fingerprint after the
+  first sign-in.
+- **Category filtering** and fast add flows keep the vault usable day to day.
 
-## Security properties
+## Security model
 
-- No PIN/password stored by the app itself; authentication is delegated to the
-  hardware-backed keystore.
-- Protected apps are hidden from the recent-apps carousel while locked.
-- Offer support on rooted devices kept minimal — the threat model is casual access,
-  not a compromised device.
+- The **master password never reaches the server** in any form; all locking and
+  unlocking happens on-device.
+- The master password is run through a deliberately slow KDF, then derives the
+  key used to encrypt the vault.
+- The server stores only scrambled data — there is **no server-side password
+  reset**, because the operator holds no key.
+- **Emergency Kit**: on signup, users receive a Security Key and a 24-word
+  recovery phrase — the only path back if the master password is lost.
+- **No ads, no third-party trackers**; the app is built to be used, not watched.
 
-It started as a personal itch (a hand-me-down phone with curious siblings) and became a
-good exercise in Android lifecycle, `UsageStatsManager`, and keeping a `Service` polite
-to the system's battery police.
+## Operations
+
+- Independently built and maintained; distributed free on Google Play.
+- Multiple encryption algorithms and configurable TOTP parameters supported.
+- Recovery flow and in-app master password change handled without exposing keys
+  to the backend.
+
+Built as a solo, end-to-end product — spanning Android development, applied
+cryptography, key management, backend sync and release operations.
