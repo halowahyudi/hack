@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Wahyudi — SDET / QA Automation Engineer</title>
+<style>
+  @page { size: A4; margin: 11mm 12mm 10mm; }
+
+  :root {
+    --ink: #11161f;
+    --muted: #5b6675;
+    --line: #dfe4ea;
+    --accent: #b5462f;
+    --accent-soft: #f6e8e4;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    color: var(--ink);
+    font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+    font-size: 9.6pt;
+    line-height: 1.34;
+  }
+
+  a { color: var(--ink); text-decoration: none; }
+
+  header { border-bottom: 2px solid var(--ink); padding-bottom: 7px; margin-bottom: 10px; }
+
+  h1 { font-size: 19pt; margin: 0 0 2px; letter-spacing: -0.02em; }
+
+  .tagline {
+    font-size: 10pt;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+    margin-bottom: 6px;
+  }
+
+  .contact { font-size: 9pt; color: var(--muted); }
+  .contact span { white-space: nowrap; }
+  .contact .sep { color: var(--line); margin: 0 6px; }
+
+  section { margin-bottom: 9px; }
+
+  h2 {
+    font-size: 9.8pt;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 2px;
+    margin: 0 0 5px;
+  }
+
+  p { margin: 0 0 6px; }
+  p.summary { color: #2b3440; }
+
+  .role { margin-bottom: 7px; }
+  .role-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .role-title { font-weight: 700; }
+  .role-org { color: var(--muted); font-size: 9.3pt; }
+  .role-range { color: var(--muted); font-size: 9pt; white-space: nowrap; }
+
+  ul { margin: 4px 0 0; padding-left: 16px; }
+  li { margin-bottom: 2px; color: #2b3440; }
+
+  .skills { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 22px; }
+  .skill-row { font-size: 9.3pt; }
+  .skill-row .label { font-weight: 700; }
+  .skill-row .val { color: #2b3440; }
+
+  .project { margin-bottom: 5px; }
+  .project-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .project-title { font-weight: 700; }
+  .project-links { color: var(--muted); font-size: 8.3pt; white-space: nowrap; }
+  .project-desc { color: #2b3440; font-size: 9.3pt; }
+  .project-stack { color: var(--muted); font-size: 8.3pt; }
+
+  .qa-strong { font-weight: 700; }
+
+  footer { border-top: 1px solid var(--line); margin-top: 4px; padding-top: 5px; color: var(--muted); font-size: 8.4pt; }
+
+  @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+</style>
+</head>
+<body>
+
+  <header>
+    <h1>Wahyudi</h1>
+    <div class="tagline">SDET / QA Automation Engineer</div>
+    <div class="contact">
+      <span>hi@wahyudi.dev</span><span class="sep">·</span>
+      <span>wahyudi.dev</span><span class="sep">·</span>
+      <span>github.com/halowahyudi</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>Summary</h2>
+    <p class="summary">
+      QA automation engineer who turns manual regression into deterministic, CI-driven test suites.
+      I build API and end-to-end automation with <span class="qa-strong">Playwright</span>,
+      <span class="qa-strong">Postman/Newman</span> and <span class="qa-strong">k6</span>, wire them into
+      <span class="qa-strong">CI/CD</span> quality gates, and bring a security-aware mindset to testing —
+      finding defects through negative and boundary test cases, not just happy paths.
+    </p>
+  </section>
+
+  <section>
+    <h2>Experience</h2>
+
+    <div class="role">
+      <div class="role-head">
+        <span><span class="role-title">SDET / QA Automation Engineer</span> <span class="role-org">— Independent, various clients</span></span>
+      </div>
+      <ul>
+        <li>Design and maintain <span class="qa-strong">API test suites in Postman</span> and run them in CI via
+          <span class="qa-strong">Newman</span>, catching contract and validation regressions before release.</li>
+        <li>Build <span class="qa-strong">end-to-end browser tests with Playwright</span>, replacing fragile manual
+          regression passes with repeatable, parallelized runs.</li>
+        <li>Write <span class="qa-strong">performance tests with k6</span> to validate load behavior on critical
+          endpoints and surface latency and error-rate regressions early.</li>
+        <li>Integrate tests into <span class="qa-strong">GitHub Actions</span> and <span class="qa-strong">GitLab CI</span>
+          pipelines as quality gates, so merges are blocked on failed tests.</li>
+        <li>Apply <span class="qa-strong">shift-left testing</span> — review requirements and designs for
+          testability, and define acceptance criteria before implementation.</li>
+        <li>Write reproducible bug reports with clear steps, expected vs actual, evidence and severity, usable by
+          developers and PMs without back-and-forth.</li>
+      </ul>
+    </div>
+
+    <div class="role">
+      <div class="role-head">
+        <span><span class="role-title">Software Engineer</span> <span class="role-org">— Independent, various clients</span></span>
+      </div>
+      <ul>
+        <li>Ship full-stack web applications (TypeScript, Next.js/NestJS, Laravel) with testability built in from the start.</li>
+        <li>Own features end to end — including the automated tests and CI checks that prove they work.</li>
+      </ul>
+    </div>
+
+    <div class="role">
+      <div class="role-head">
+        <span><span class="role-title">Application Security & Security Research</span> <span class="role-org">— Independent / HackerOne</span></span>
+      </div>
+      <ul>
+        <li>Security-aware testing across the SDLC: threat modeling, secure code review and adversarial test cases.</li>
+        <li>Coordinated vulnerability disclosure to major platforms — finding broken access control, authentication
+          bypass and API authorization flaws through <span class="qa-strong">negative and boundary testing</span>.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>QA Skills</h2>
+    <div class="skills">
+      <div class="skill-row"><span class="label">Test Automation:</span> <span class="val">Playwright (E2E), Postman + Newman (API), k6 (performance)</span></div>
+      <div class="skill-row"><span class="label">CI/CD:</span> <span class="val">GitHub Actions, GitLab CI, Jenkins — test quality gates</span></div>
+      <div class="skill-row"><span class="label">Testing Types:</span> <span class="val">API, E2E, integration, regression, boundary & negative testing, smoke</span></div>
+      <div class="skill-row"><span class="label">Test Design:</span> <span class="val">Test plans, test cases, acceptance criteria, bug reporting, shift-left QA</span></div>
+      <div class="skill-row"><span class="label">Languages:</span> <span class="val">TypeScript / JavaScript, PHP</span></div>
+      <div class="skill-row"><span class="label">Security-aware QA:</span> <span class="val">OWASP Top 10, access-control & input-validation test cases</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Projects</h2>
+
+    <div class="project">
+      <div class="project-head">
+        <span class="project-title">Gembok — encrypted password manager & authenticator</span>
+        <span class="project-links">gembok.dev</span>
+      </div>
+      <div class="project-desc">Android vault for passwords, cards and TOTP 2FA codes, independently built and maintained —
+        from requirements and edge-case planning through release and support.</div>
+      <div class="project-stack">Kotlin · Android · Kotlin/Compose UI</div>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <span class="project-title">Spotify API Scraper</span>
+        <span class="project-links">github.com/halowahyudi/spotify-api-scraper</span>
+      </div>
+      <div class="project-desc">Metadata extraction tool built with careful handling of API responses and failure cases.</div>
+      <div class="project-stack">Node.js · TypeScript · Puppeteer</div>
+    </div>
+  </section>
+
+  <footer>
+    Full methodology, writeups and projects at wahyudi.dev — open to QA automation and SDET roles.
+  </footer>
+
+</body>
+</html>
