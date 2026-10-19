@@ -2,6 +2,9 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import { ROLES, SITE } from '../lib/site';
+import { getCertificates, formatDate } from '../lib/content';
+
+const certificates = await getCertificates();
 
 const tooling = [
   { name: 'Engineering', items: ['Next.js', 'NestJS', 'Laravel', 'TypeScript', 'Tailwind CSS', 'Firebase', 'MongoDB', 'MariaDB'] },
@@ -143,6 +146,40 @@ const timeline = [
                 ))}
               </ul>
             </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-ink-800 bg-ink-900/40">
+    <div class="container-page py-12 md:py-16">
+      <p class="section-eyebrow mb-8" data-style="2">Certifications</p>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          certificates.map((cert) => (
+            <a
+              href={cert.data.image}
+              target="_blank"
+              rel="noopener"
+              class="card group flex flex-col gap-3 p-5"
+            >
+              <div class="flex items-center justify-between gap-3">
+                <span class="chip" data-accent="true">{cert.data.issuer}</span>
+                <span class="font-mono text-xs text-ink-500">{formatDate(cert.data.date)}</span>
+              </div>
+              <h3 class="text-base font-bold leading-snug text-ink-100 group-hover:text-accent-300">
+                {cert.data.title}
+              </h3>
+              {cert.data.credential_id && (
+                <p class="mt-auto font-mono text-xs text-ink-500">
+                  ID: {cert.data.credential_id}
+                </p>
+              )}
+              <span class="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-accent-400 group-hover:text-accent-300">
+                view credential →
+              </span>
+            </a>
           ))
         }
       </div>

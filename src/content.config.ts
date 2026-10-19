@@ -71,4 +71,19 @@ const methodology = defineCollection({
   }),
 });
 
-export const collections = { blog, projects, methodology, disclosures };
+const certificates = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/certificates' }),
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    issuer: z.string(),
+    issuer_url: z.string().url().optional(),
+    logo: z.string().optional(),
+    image: z.string().optional(),
+    issuer_title: z.string().optional(),
+    issuer_name: z.string().optional(),
+    credential_id: z.string().optional(),
+  }),
+});
+
+export const collections = { blog, projects, methodology, disclosures, certificates };

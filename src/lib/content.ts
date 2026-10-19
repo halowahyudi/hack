@@ -5,8 +5,10 @@ export type Project = CollectionEntry<'projects'>;
 export type Methodology = CollectionEntry<'methodology'>;
 export type Disclosure = CollectionEntry<'disclosures'>;
 
-const isPublishedInProd = <T extends { data: { draft?: boolean } }>(entry: T) =>
-  import.meta.env.PROD ? entry.data.draft !== true : true;
+const isPublishedInProd = <T extends { data: Record<string, unknown> }>(entry: T): boolean => {
+  if (!import.meta.env.PROD) return true;
+  return entry.data.draft !== true;
+};
 
 export function formatDate(date: Date): string {
   return new Intl.DateTimeFormat('en-US', {
@@ -62,6 +64,13 @@ export async function getDisclosures(): Promise<Disclosure[]> {
     if (sev !== 0) return sev;
     return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
   });
+}
+
+export type Certificate = CollectionEntry<'certificates'>;
+
+export async function getCertificates(): Promise<Certificate[]> {
+  const items = await getCollection('certificates', isPublishedInProd);
+  return items.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 }
 
 export function countBySeverity(entries: { data: { severity: string } }[]): Record<string, number> {
