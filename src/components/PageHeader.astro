@@ -9,14 +9,14 @@ interface Props {
 const { eyebrow, title, description, meta } = Astro.props;
 ---
 
-<header class="relative overflow-hidden border-b border-ink-800">
+<header class="relative overflow-hidden border-b border-ink-700">
   <div class="grid-overlay" aria-hidden="true"></div>
   <div class="container-page relative py-14 md:py-20">
-    {eyebrow && <p class="section-eyebrow mb-3">{eyebrow}</p>}
-    <h1 class="text-3xl font-extrabold tracking-tight text-ink-100 md:text-5xl">{title}</h1>
+    {eyebrow && <p class="section-eyebrow mb-4">{eyebrow}</p>}
+    <h1 class="display-serif max-w-3xl text-4xl md:text-6xl">{title}</h1>
     {description && (
-      <p class="mt-4 max-w-2xl text-base leading-relaxed text-ink-400 md:text-lg">{description}</p>
+      <p class="mt-5 max-w-2xl text-base leading-relaxed text-ink-400 md:text-lg">{description}</p>
     )}
-    {meta && <p class="mt-4 font-mono text-xs uppercase tracking-[0.18em] text-ink-500">{meta}</p>}
+    {meta && <p class="mt-5 font-mono text-xs uppercase tracking-[0.18em] text-ink-500">{meta}</p>}
   </div>
 </header>

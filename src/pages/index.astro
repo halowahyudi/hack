@@ -20,93 +20,57 @@ const phaseCounts = METHODOLOGY_PHASES.map((phase) => ({
   phase,
   count: methodology.filter((m) => m.data.phase === phase).length,
 }));
-
-const focus = [
-  'Web App Pentesting',
-  'API Security',
-  'Mobile Security',
-  'SDET / Test Automation',
-  'Secure Software',
-  'Bug Bounty & Disclosure',
-] as const;
 ---
 
 <BaseLayout>
-  <!-- ================= HERO ================= -->
+  <!-- ================= HERO (Stat-Led, editorial) ================= -->
   <section class="relative overflow-hidden">
     <div class="grid-overlay" aria-hidden="true"></div>
-    <div class="container-page relative grid items-center gap-12 py-16 md:py-24 lg:grid-cols-[1.15fr_1fr]">
-      <div>
-        <p class="section-eyebrow mb-4">~/ introduction</p>
-        <h1 class="text-4xl font-extrabold leading-[1.1] tracking-tight text-ink-100 md:text-6xl">
-          Security-minded
-          <br />
-          engineer &amp; researcher.
-        </h1>
-        <p class="mt-5 max-w-xl text-lg leading-relaxed text-ink-400">
-          I'm {SITE.author} — I build reliable software, then attack it before the
-          adversaries do. SDET automation, application security, and offensive
-          research with responsible disclosure at the core.
-        </p>
+    <div class="container-page relative py-16 md:py-24">
+      <p class="section-eyebrow mb-6">~/ introduction</p>
 
-        <div class="mt-7 flex flex-wrap gap-3">
-          <a href="/methodology" class="btn">methodology →</a>
-          <a href="/projects" class="btn btn-ghost">projects</a>
-          <a href="/blog" class="btn btn-ghost">blog</a>
-        </div>
+      <h1 class="display-serif max-w-4xl text-4xl md:text-6xl lg:text-7xl">
+        Security-minded engineer &amp; researcher.
+      </h1>
 
-        <ul class="mt-9 flex flex-wrap gap-2">
-          {focus.map((f) => (
-            <li class="chip" data-accent="true">{f}</li>
-          ))}
-        </ul>
+      <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-400">
+        I'm {SITE.author} — I build reliable software, then attack it before the
+        adversaries do. SDET automation, application security, and offensive
+        research with responsible disclosure at the core.
+      </p>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/methodology" class="btn">methodology →</a>
+        <a href="/projects" class="btn btn-ghost">projects</a>
+        <a href="/blog" class="btn btn-ghost">blog</a>
       </div>
 
-      <div class="terminal" aria-hidden="true">
-        <div class="terminal-bar">
-          <span class="terminal-dot" style="background:#ff5f56"></span>
-          <span class="terminal-dot" style="background:#ffbd2e"></span>
-          <span class="terminal-dot" style="background:#27c93f"></span>
-          <span class="ml-2 font-mono text-[0.7rem] text-ink-500">wint3rcold@attack-box: ~</span>
-        </div>
-        <div class="terminal-body text-ink-200">
-          <span class="terminal-prompt">$</span> whoami
-          <br />
-          &nbsp;&nbsp;hacker-honest / wahyudi.dev
-          <br />
-          <span class="terminal-prompt">$</span> cat roles.txt
-          <br />
-          &nbsp;&nbsp;→ Software Engineer
-          <br />
-          &nbsp;&nbsp;→ SDET
-          <br />
-          &nbsp;&nbsp;→ Application Security
-          <br />
-          &nbsp;&nbsp;→ Security Researcher
-          <br />
-          <span class="terminal-prompt">$</span> <span class="terminal-path">nmap</span> --top-ports 1000 my_ambition
-          <br />
-          &nbsp;&nbsp;<span class="terminal-path">443/tcp</span> open &nbsp; https (ADHD dreamer)
-          <br />
-          &nbsp;&nbsp;<span class="terminal-path">9000/tcp</span> open &nbsp; effort &amp; consistency
-          <br />
-          <span class="terminal-prompt">$</span> echo "explore → /methodology /blog /projects"
-          <br />
-          <span class="terminal-path">explore → /methodology /blog /projects</span>
-          <span class="blinker"></span>
-        </div>
+      <div class="mt-12 grid grid-cols-2 gap-px border border-ink-700 bg-ink-700 sm:grid-cols-4">
+        {
+          [
+            { n: methodology.length, l: 'methodology pages', h: '/methodology' },
+            { n: posts.length, l: 'writeups & posts', h: '/blog' },
+            { n: projects.length, l: 'open-source projects', h: '/projects' },
+            { n: disclosures.length + 2, l: 'coordinated disclosures', h: '/disclosures' },
+          ].map((s) => (
+            <a href={s.h} class="group bg-ink-950 p-5 transition-colors hover:bg-ink-900">
+              <span class="display-mono text-3xl text-ink-100 group-hover:text-accent-300 md:text-4xl">{s.n}</span>
+              <span class="mt-2 block font-mono text-[0.7rem] uppercase tracking-widest text-ink-400">{s.l}</span>
+            </a>
+          ))
+        }
       </div>
     </div>
   </section>
 
   <!-- ================= METHODOLOGY ================= -->
-  <section class="border-t border-ink-800/70 bg-ink-900/40">
+  <section class="border-t border-ink-700">
     <div class="container-page py-16 md:py-20">
       <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
           <p class="section-eyebrow mb-3" data-style="2">live research doc</p>
-          <h2 class="text-2xl font-bold text-ink-100 md:text-3xl">Pentesting Methodology</h2>
-          <p class="mt-2 max-w-2xl text-ink-400">
+          <h2 class="display-serif text-3xl md:text-4xl">Pentesting Methodology</h2>
+          <p class="mt-3 max-w-2xl text-ink-400">
             A living playbook I run against real targets — scoped engagements, bug bounty
             programs and labs. Organized across web, API, phishing and general hacking.
           </p>
@@ -132,7 +96,7 @@ const focus = [
     <div class="mb-8 flex items-end justify-between gap-4">
       <div>
         <p class="section-eyebrow mb-3" data-style="3">~/blog</p>
-        <h2 class="text-2xl font-bold text-ink-100 md:text-3xl">Latest from the blog</h2>
+        <h2 class="display-serif text-3xl md:text-4xl">Latest from the blog</h2>
       </div>
       <a href="/blog" class="link-accent font-mono text-sm">all posts →</a>
     </div>
@@ -143,12 +107,12 @@ const focus = [
   </section>
 
   <!-- ================= PROJECTS ================= -->
-  <section class="border-t border-ink-800/70 bg-ink-900/40">
+  <section class="border-t border-ink-700">
     <div class="container-page py-16 md:py-20">
       <div class="mb-8 flex items-end justify-between gap-4">
         <div>
           <p class="section-eyebrow mb-3" data-style="2">~/projects</p>
-          <h2 class="text-2xl font-bold text-ink-100 md:text-3xl">Featured projects</h2>
+          <h2 class="display-serif text-3xl md:text-4xl">Featured projects</h2>
         </div>
         <a href="/projects" class="link-accent font-mono text-sm">all projects →</a>
       </div>
@@ -164,8 +128,8 @@ const focus = [
     <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
       <div>
         <p class="section-eyebrow mb-3" data-style="3">~/disclosures</p>
-        <h2 class="text-2xl font-bold text-ink-100 md:text-3xl">Security disclosures</h2>
-        <p class="mt-2 max-w-2xl text-ink-400">
+        <h2 class="display-serif text-3xl md:text-4xl">Security disclosures</h2>
+        <p class="mt-3 max-w-2xl text-ink-400">
           Findings reported through coordinated disclosure to major platforms — root cause and
           impact, redacted until remediation.
         </p>
@@ -178,12 +142,13 @@ const focus = [
     </div>
   </section>
 
-  <!-- ================= CONTACT STRIP ================= -->  <section class="container-page py-16 md:py-20">
-    <div class="flex flex-col items-start justify-between gap-6 rounded-xl border border-ink-700 bg-ink-850 p-8 md:flex-row md:items-center md:p-10">
+  <!-- ================= CONTACT STRIP ================= -->
+  <section class="container-page py-16 md:py-20">
+    <div class="flex flex-col items-start justify-between gap-6 border border-ink-700 p-8 md:flex-row md:items-center md:p-10">
       <div>
         <p class="section-eyebrow mb-3" data-style="3">connect</p>
-        <h2 class="text-2xl font-bold text-ink-100">Let's talk security.</h2>
-        <p class="mt-2 max-w-lg text-ink-400">
+        <h2 class="display-serif text-3xl">Let's talk security.</h2>
+        <p class="mt-3 max-w-lg text-ink-400">
           Research, triage, mitigation, or a challenging target — I'm open for
           collaboration and security consulting.
         </p>

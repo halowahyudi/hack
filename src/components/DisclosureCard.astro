@@ -24,13 +24,13 @@ const sev = SEVERITY_META[disclosure.data.severity as Severity] ?? SEVERITY_META
     <span class="font-mono text-[0.68rem] text-ink-400">{disclosure.data.category}</span>
   </div>
 
-  <h3 class="text-lg font-bold leading-snug text-ink-100 transition-colors group-hover:text-accent-300">
+  <h3 class="font-serif text-xl font-medium leading-snug text-ink-100 transition-colors group-hover:text-accent-300">
     {disclosure.data.title}
   </h3>
 
   <p class="flex-1 text-sm leading-relaxed text-ink-400">{disclosure.data.description}</p>
 
-  <div class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-ink-800 pt-3">
+  <div class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-ink-700 pt-3">
     <div class="flex items-center gap-2 font-mono text-[0.68rem] text-ink-500">
       <time datetime={disclosure.data.pubDate.toISOString()}>{formatDate(disclosure.data.pubDate)}</time>
       {disclosure.data.redacted && (

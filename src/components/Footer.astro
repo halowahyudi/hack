@@ -8,13 +8,10 @@ const socials = [
 ] as const;
 ---
 
-<footer class="border-t border-ink-800 bg-ink-900/60">
-  <div class="container-page grid gap-10 py-12 md:grid-cols-[1.4fr_1fr_1fr]">
+<footer class="border-t border-ink-700">
+  <div class="container-page grid gap-8 py-12 md:grid-cols-[1.5fr_1fr_1fr]">
     <div>
-      <p class="flex items-baseline gap-1 font-mono text-base font-semibold text-ink-100">
-        <span class="text-accent-400">~</span>
-        {SITE.domain}
-      </p>
+      <p class="font-serif text-2xl font-semibold tracking-tight text-ink-100">{SITE.domain}</p>
       <p class="mt-3 max-w-md text-sm leading-relaxed text-ink-400">
         {SITE.tagline}. I build secure software, break it on purpose, and write about what
         both sides taught me.
@@ -59,10 +56,10 @@ const socials = [
     </div>
   </div>
 
-  <div class="border-t border-ink-800">
+  <div class="border-t border-ink-700">
     <div class="container-page flex flex-col items-start justify-between gap-3 py-6 font-mono text-xs text-ink-500 sm:flex-row sm:items-center">
       <p>© {new Date().getFullYear()} {SITE.author}. All rights reserved.</p>
-      <p>Built with <a href="https://astro.build" class="link-accent" target="_blank" rel="noopener">Astro</a> · Dark mode only</p>
+      <p>Built with <a href="https://astro.build" class="link-accent" target="_blank" rel="noopener">Astro</a> · set with Newsreader &amp; Inter</p>
     </div>
   </div>
 </footer>

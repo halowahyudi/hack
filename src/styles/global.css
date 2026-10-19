@@ -1,29 +1,39 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
+/* ============================================================
+   Hallmark · genre: editorial · macrostructure: Stat-Led ·
+   theme: Newsprint (dark) · enrichment: none · nav: N6 · footer: Ft1
+   ============================================================ */
+
 @theme {
+  /* Editorial voice: serif display + workhorse body + mono labels */
   --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Newsreader', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-  --color-ink-950: #05070d;
-  --color-ink-900: #0a0e17;
-  --color-ink-850: #0e131f;
-  --color-ink-800: #131a28;
-  --color-ink-700: #1c2536;
-  --color-ink-600: #2a3548;
-  --color-ink-500: #3d4a60;
-  --color-ink-400: #6b7789;
-  --color-ink-300: #98a3b3;
-  --color-ink-200: #c3cbd6;
-  --color-ink-100: #e6eaf0;
+  /* --- OKLCH palette, midnight anchor (hue 30) tinted toward warm-red accent.
+     Dark mode: paper 12-16% L, ink 92-96% L, neutrals carry low chroma 0.008. --- */
+  --color-ink-950: oklch(13% 0.010 30);  /* paper */
+  --color-ink-900: oklch(16% 0.011 30);  /* paper +1 (elevation is lighter) */
+  --color-ink-850: oklch(19% 0.012 30);
+  --color-ink-800: oklch(23% 0.013 30);
+  --color-ink-700: oklch(30% 0.014 30);  /* hairline rules */
+  --color-ink-600: oklch(40% 0.014 30);
+  --color-ink-500: oklch(52% 0.013 30);
+  --color-ink-400: oklch(66% 0.012 30);
+  --color-ink-300: oklch(78% 0.010 30);
+  --color-ink-200: oklch(88% 0.008 30);
+  --color-ink-100: oklch(94% 0.007 30);  /* ink */
 
-  --color-accent-500: #ff4057;
-  --color-accent-400: #ff6174;
-  --color-accent-300: #ff8a99;
-  --color-accent-glow: rgba(255, 64, 87, 0.15);
+  /* Accent: red, warm. Highlighter, not fill. Chroma pulled back for dark. */
+  --color-accent-500: oklch(62% 0.21 20);
+  --color-accent-400: oklch(70% 0.18 20);
+  --color-accent-300: oklch(80% 0.13 20);
+  --color-accent-glow: color-mix(in oklab, var(--color-accent-500) 16%, transparent);
 
-  --color-signal-500: #ff5c72;
-  --color-info-500: #4cc3ff;
+  --color-signal-500: oklch(64% 0.20 20);
+  --color-info-500: oklch(70% 0.11 240);
 }
 
 @layer base {
@@ -34,18 +44,17 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    /* hard floor: no horizontal scroll */
+    overflow-x: clip;
   }
-
   body {
+    overflow-x: clip;
     background-color: var(--color-ink-950);
     color: var(--color-ink-200);
     font-family: var(--font-sans);
+    font-weight: 400;
     line-height: 1.65;
     min-height: 100vh;
-    background-image:
-      radial-gradient(circle at 15% -10%, rgba(255, 64, 87, 0.08), transparent 45%),
-      radial-gradient(circle at 90% 0%, rgba(255, 138, 153, 0.06), transparent 40%);
-    background-attachment: fixed;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
   }
@@ -70,7 +79,7 @@
   :focus-visible {
     outline: 2px solid var(--color-accent-500);
     outline-offset: 2px;
-    border-radius: 4px;
+    border-radius: 2px;
   }
 
   ::-webkit-scrollbar {
@@ -82,8 +91,7 @@
   }
   ::-webkit-scrollbar-thumb {
     background: var(--color-ink-600);
-    border-radius: 999px;
-    border: 2px solid var(--color-ink-900);
+    border-radius: 2px;
   }
   ::-webkit-scrollbar-thumb:hover {
     background: var(--color-ink-500);
@@ -93,34 +101,38 @@
 @layer components {
   .container-page {
     width: 100%;
-    max-width: 72rem;
+    max-width: 76rem;
     margin-inline: auto;
     padding-inline: 1.25rem;
   }
 
+  /* Editorial surface: hairlines, not card borders.
+     A card becomes a hairline-ruled block with a quiet hover. */
   .card {
-    background: color-mix(in oklab, var(--color-ink-850) 88%, transparent);
+    background: color-mix(in oklab, var(--color-ink-900) 78%, transparent);
     border: 1px solid var(--color-ink-700);
-    border-radius: 0.85rem;
-    transition: border-color 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+    border-radius: 2px;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
   }
   .card:hover {
     border-color: color-mix(in oklab, var(--color-accent-500) 55%, var(--color-ink-700));
-    transform: translateY(-2px);
+    background: color-mix(in oklab, var(--color-ink-850) 82%, transparent);
   }
 
+  /* Tags: square, small-caps, hairline — editorial label voice */
   .chip {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    padding: 0.2rem 0.55rem;
-    border-radius: 999px;
+    padding: 0.18rem 0.5rem;
+    border-radius: 2px;
     border: 1px solid var(--color-ink-600);
-    background: var(--color-ink-850);
+    background: var(--color-ink-900);
     color: var(--color-ink-300);
     transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
   }
@@ -137,12 +149,12 @@
   }
   .filter-pill[data-active='true'] {
     border-color: var(--color-accent-500);
-    background: color-mix(in oklab, var(--color-accent-500) 14%, var(--color-ink-850));
+    background: color-mix(in oklab, var(--color-accent-500) 12%, var(--color-ink-900));
     color: var(--color-accent-300);
   }
   .filter-card[data-active='true'] {
     border-color: var(--color-accent-500);
-    background: color-mix(in oklab, var(--color-accent-500) 8%, var(--color-ink-850));
+    background: color-mix(in oklab, var(--color-accent-500) 8%, var(--color-ink-900));
   }
 
   .link-accent {
@@ -155,29 +167,59 @@
     text-underline-offset: 3px;
   }
 
-/* ---------- layout helpers ---------- */
-
+  /* ---------- editorial section eyebrows ---------- */
   .section-eyebrow {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--color-accent-400);
   }
   .section-eyebrow::before {
-    content: '▶';
-    font-size: 0.6rem;
+    content: '—';
     color: var(--color-ink-400);
   }
   .section-eyebrow[data-style='2']::before {
-    content: '#';
+    content: '§';
   }
   .section-eyebrow[data-style='3']::before {
-    content: '~$';
+    content: '↳';
+  }
+
+  /* Editorial display headings */
+  .display-serif {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    line-height: 1.06;
+    color: var(--color-ink-100);
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
+
+  .display-mono {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    color: var(--color-ink-100);
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
+
+  .rule {
+    height: 1px;
+    background: var(--color-ink-700);
+    border: 0;
+  }
+  .rule-accent {
+    height: 2px;
+    background: color-mix(in oklab, var(--color-accent-500) 70%, var(--color-ink-700));
+    border: 0;
   }
 
   .grid-overlay {
@@ -185,9 +227,9 @@
     inset: 0;
     pointer-events: none;
     background-image:
-      linear-gradient(to right, rgba(152, 163, 179, 0.06) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(152, 163, 179, 0.06) 1px, transparent 1px);
-    background-size: 44px 44px;
+      linear-gradient(to right, rgba(152, 163, 179, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(152, 163, 179, 0.05) 1px, transparent 1px);
+    background-size: 48px 48px;
     mask-image: radial-gradient(ellipse 90% 80% at 50% 0%, black 40%, transparent 100%);
   }
 
@@ -195,99 +237,45 @@
     color: var(--color-ink-500);
   }
 
-  /* ---------- buttons ---------- */
-
+  /* ---------- buttons: square, hairline, accent as edge ---------- */
   .btn {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     font-family: var(--font-mono);
-    font-size: 0.78rem;
+    font-size: 0.76rem;
     font-weight: 600;
     letter-spacing: 0.04em;
     padding: 0.55rem 1rem;
-    border-radius: 0.5rem;
+    border-radius: 2px;
     border: 1px solid var(--color-accent-500);
     background: color-mix(in oklab, var(--color-accent-500) 12%, transparent);
     color: var(--color-accent-300);
     transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
   }
   .btn:hover {
-    background: color-mix(in oklab, var(--color-accent-500) 22%, transparent);
+    background: color-mix(in oklab, var(--color-accent-500) 20%, transparent);
     border-color: var(--color-accent-400);
     transform: translateY(-1px);
   }
 
   .btn-ghost {
     border-color: var(--color-ink-600);
-    background: var(--color-ink-850);
+    background: var(--color-ink-900);
     color: var(--color-ink-200);
   }
   .btn-ghost:hover {
     border-color: var(--color-ink-400);
-    background: var(--color-ink-800);
+    background: var(--color-ink-850);
     color: var(--color-ink-100);
   }
 
-  /* ---------- terminal ---------- */
-
-  .terminal {
-    background: color-mix(in oklab, var(--color-ink-900) 86%, transparent);
-    border: 1px solid var(--color-ink-700);
-    border-radius: 0.85rem;
-    box-shadow: 0 18px 50px -22px rgba(0, 0, 0, 0.85);
-    overflow: hidden;
-  }
-  .terminal-bar {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 0.9rem;
-    border-bottom: 1px solid var(--color-ink-700);
-    background: color-mix(in oklab, var(--color-ink-850) 88%, transparent);
-  }
-  .terminal-dot {
-    width: 0.65rem;
-    height: 0.65rem;
-    border-radius: 999px;
-  }
-  .terminal-body {
-    padding: 1rem 1.15rem;
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    line-height: 1.9;
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
-  .terminal-prompt {
-    color: var(--color-accent-400);
-  }
-  .terminal-path {
-    color: var(--color-info-500);
-  }
-
-  .blinker {
-    display: inline-block;
-    width: 0.55em;
-    height: 1.05em;
-    vertical-align: text-bottom;
-    margin-left: 2px;
-    background: var(--color-accent-500);
-    animation: blink 1.1s steps(2, start) infinite;
-  }
-  @keyframes blink {
-    to {
-      visibility: hidden;
-    }
-  }
-
-  /* ---------- nav ---------- */
-
+  /* ---------- nav: editorial masthead ---------- */
   .nav-link {
     position: relative;
     font-family: var(--font-mono);
-    font-size: 0.72rem;
-    font-weight: 600;
+    font-size: 0.7rem;
+    font-weight: 500;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--color-ink-300);
@@ -307,28 +295,10 @@
     right: 0.35rem;
     bottom: -0.35rem;
     height: 2px;
-    border-radius: 2px;
     background: var(--color-accent-500);
   }
 
-  /* ---------- cards / chips ---------- */
-
-  .rear-card {
-    border-radius: 0.85rem;
-    border: 1px solid var(--color-ink-600);
-    background: var(--color-ink-900);
-    padding: 0.4rem 0.9rem;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--color-ink-300);
-  }
-
-  .chip[data-accent='true'] {
-    color: var(--color-accent-300);
-    border-color: color-mix(in oklab, var(--color-accent-500) 45%, var(--color-ink-600));
-    background: color-mix(in oklab, var(--color-accent-500) 10%, var(--color-ink-850));
-  }
-
+  /* ---------- misc ---------- */
   .status-dot {
     display: inline-block;
     width: 0.45rem;
@@ -347,21 +317,18 @@
     background: var(--color-signal-500);
   }
 
-  /* ---------- methodology pipeline ---------- */
-
   .pipeline-step {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
-    padding: 0.9rem 1rem;
-    border-radius: 0.7rem;
-    border: 1px solid var(--color-ink-700);
-    background: var(--color-ink-850);
-    transition: border-color 0.2s ease, transform 0.2s ease;
+    padding: 1rem 1.1rem;
+    border-left: 2px solid var(--color-ink-700);
+    background: transparent;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
   }
   .pipeline-step:hover {
-    border-color: color-mix(in oklab, var(--color-accent-500) 55%, var(--color-ink-700));
-    transform: translateY(-2px);
+    border-left-color: var(--color-accent-500);
+    background: color-mix(in oklab, var(--color-ink-900) 60%, transparent);
   }
 
   .timeline-item {
@@ -372,17 +339,17 @@
     content: '';
     position: absolute;
     left: 0.35rem;
-    top: 0.35rem;
+    top: 0.45rem;
     width: 0.5rem;
     height: 0.5rem;
-    border-radius: 999px;
+    border-radius: 2px;
     background: var(--color-accent-500);
     box-shadow: 0 0 10px var(--color-accent-glow);
   }
   .timeline-item:not(:last-child)::after {
     content: '';
     position: absolute;
-    left: 0.57rem;
+    left: 0.58rem;
     top: 1rem;
     bottom: -0.5rem;
     width: 1px;
@@ -394,7 +361,7 @@
     font-family: var(--font-mono);
     font-size: 0.7rem;
     padding: 0.15rem 0.45rem;
-    border-radius: 0.35rem;
+    border-radius: 2px;
     border: 1px solid var(--color-ink-600);
     border-bottom-width: 2px;
     background: var(--color-ink-900);
@@ -425,10 +392,19 @@
   --tw-prose-td-borders: var(--color-ink-700);
 }
 
+/* Headings inside articles get the editorial serif */
+.prose-custom :where(h1, h2, h3) {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--color-ink-100);
+  overflow-wrap: anywhere;
+}
+
 .prose-custom :where(code):not(:where(pre *)) {
   background: color-mix(in oklab, var(--color-accent-500) 10%, var(--color-ink-800));
   border: 1px solid color-mix(in oklab, var(--color-accent-500) 25%, var(--color-ink-700));
-  border-radius: 0.3rem;
+  border-radius: 2px;
   padding: 0.1rem 0.35rem;
   font-size: 0.85em;
   font-weight: 500;
@@ -441,7 +417,7 @@
 
 .prose-custom :where(pre) {
   border: 1px solid var(--color-ink-700);
-  border-radius: 0.65rem;
+  border-radius: 2px;
   background-color: var(--color-ink-900);
 }
 
@@ -451,7 +427,8 @@
 
 .prose-custom :where(blockquote) {
   background: var(--color-ink-850);
-  border-radius: 0 0.5rem 0.5rem 0;
+  border-radius: 0;
+  border-left: 2px solid var(--color-accent-500);
   padding: 0.25rem 1rem;
   font-style: normal;
 }

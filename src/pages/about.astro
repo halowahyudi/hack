@@ -69,7 +69,7 @@ const timeline = [
 
   <section class="container-page grid gap-12 py-12 md:py-16 lg:grid-cols-[1.4fr_1fr]">
     <div>
-      <h2 class="text-xl font-bold text-ink-100">The short version</h2>
+      <h2 class="font-serif text-2xl font-medium text-ink-100">The short version</h2>
       <div class="prose prose-custom mt-5 max-w-none">
         <p>
           I'm a software engineer who spent years writing production code and test
@@ -88,7 +88,7 @@ const timeline = [
         </p>
       </div>
 
-      <h2 class="mt-12 text-xl font-bold text-ink-100">What I optimize for</h2>
+      <h2 class="mt-12 font-serif text-2xl font-medium text-ink-100">What I optimize for</h2>
       <div class="mt-5 grid gap-4 sm:grid-cols-3">
         {
           principles.map((p) => (
@@ -136,7 +136,7 @@ const timeline = [
           timeline.map((t) => (
             <div class="timeline-item">
               <div class="flex flex-wrap items-baseline justify-between gap-2">
-                <h3 class="text-base font-bold text-ink-100">{t.role}</h3>
+                <h3 class="font-serif text-lg font-medium text-ink-100">{t.role}</h3>
                 <span class="font-mono text-xs text-ink-500">{t.range}</span>
               </div>
               <p class="mt-0.5 font-mono text-xs text-accent-400">{t.org}</p>
