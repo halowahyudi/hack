@@ -5,6 +5,13 @@
   "framework": "astro",
   "headers": [
     {
+      "source": "/.well-known/(.*)",
+      "headers": [
+        { "key": "Content-Type", "value": "text/plain; charset=utf-8" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
+    },
+    {
       "source": "/pagefind/(.*)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
